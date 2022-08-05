@@ -1,34 +1,95 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-// Import this file to use console.log
-import "hardhat/console.sol";
+contract ERC20 {
 
-contract Lock {
-    uint public unlockTime;
-    address payable public owner;
+    string public tokenName;
 
-    event Withdrawal(uint amount, uint when);
+    string public tokenSymbol;
 
-    constructor(uint _unlockTime) payable {
-        require(
-            block.timestamp < _unlockTime,
-            "Unlock time should be in the future"
-        );
+    uint256 public tokenDecimals;
 
-        unlockTime = _unlockTime;
-        owner = payable(msg.sender);
-    }
+    uint256 public tokenSupply = 1000000;
 
-    function withdraw() public {
-        // Uncomment this line to print a log in your terminal
-        // console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
+    mapping public (address owner => uint256 balance) balances;
 
-        require(block.timestamp >= unlockTime, "You can't withdraw yet");
-        require(msg.sender == owner, "You aren't the owner");
 
-        emit Withdrawal(address(this).balance, block.timestamp);
 
-        owner.transfer(address(this).balance);
-    }
+    // Mapping of owner, and balance . named balances?
+    
+    constructor (string _name, string _symbol, uint256 _decimals) {
+        // need to initialize the name and symbol of the token.
+        tokenName = _name;
+        tokenSymbol = _symbol;
+        tokenDecimals = _decimals;
+
+    };
+
+    name () public view returns (string) {
+        return tokenName;
+    };
+
+
+
+    symbol () public view returns (string) {
+        return tokenSymbol;
+    };
+
+    decimals () public view returns (uint256) {
+        return tokenDecimals;
+    };
+
+    totalSupply () public view returns (uint256) {
+        return tokenSupply;
+    };
+
+    balanceOf(address _owner) public view returns (uint256) {
+        // Check if the address is 0x0?
+        return balances(_owner);
+    };
+
+    transferFrom(address _from, address _to, uint256 _amount) public view returns (bool success) {
+        require(_from != 0x0, "Cannot transfer from the zero address.");
+        require(_to != 0x0, "Cannot transfer to the zero address.");
+        require(_amount >= balanceOf(_from), "the amount exceeds the balance of the address.");
+
+        balances(_from) = balances(_from) -= amount;
+        balances(_to) = balances(_to) += amount;
+
+        emit Transfer;
+
+        return true;
+
+    };
+
+    mint() {};
+
+    approve() {};
+
+    allowance() {};
+
+    // Events
+
+    Transfer() {};
+
+    Approval () {};
+
+    // only owner function modifier () {};
+
+    // transfer the contract's balance from the contract to the owner.
+
+
+
+    receive() {};
+
+    fallback() {};
+
+
+
+    
+
+
+
+
+
 }
