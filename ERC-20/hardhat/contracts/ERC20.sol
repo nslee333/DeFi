@@ -9,18 +9,23 @@ contract ERC20 {
 
     uint256 public tokenDecimals = 18;
 
-    uint256 public tokenSupply = 1000000; // 1 Million.
+    uint256 public tokenSupply = 1000000 * 10**18; // 1 Million.
 
-    uint256 public tokenPrice = 0.001 Ether;
+    uint256 public totalTokenSupply = 1000000 * 10**18; 
+
+    uint256 public tokenPrice = 0.000001 ether;
 
     mapping(address owner => uint256 balance) public balances;
     
     mapping(address _owner => mapping(address _spender => uint256 _amount)) private allowances;
 
-    constructor (string _name, string _symbol) {
+    address private _contractOwner; 
+
+    constructor(string _name, string _symbol) {
         // need to initialize the name and symbol of the token.
         tokenName = _name;
         tokenSymbol = _symbol;
+        _contractOwner = msg.sender();
 
     };
 
@@ -39,26 +44,32 @@ contract ERC20 {
     };
 
     function totalSupply() public view returns (uint256) {
-        return tokenSupply;
+        return totalTokenSupply;
     };
 
     function balanceOf(address _owner) public view returns (uint256) {
-        // Check if the address is 0x0?
         return balances[_owner];
     };
 
 
-    function transfer(address _to, uint256 _amount) {
-        // This is for when the _from account is caller.
+    function transfer(address _to, uint256 _amount) public  {
+        require(_to != address(0), "Cannot transfer to the zero address");
+        require(_amount > 0, "Cannot transfer zero tokens");
+
+        balances[msg.sender] -= _amount;
+        balances[_to] += _amount;
+
+        emit Transfer(msg.sender, _to, _amount);
     };
 
-    function allowance(address _owner, address _spender) {
-        require(_owner != address(0), "Please enter a valid account.");
+    function allowance(address _owner, address _spender) public view returns (uint256) {
+        require(_owner != address(0), "Please enter a valid owner account.");
+        require(_spender != address(0), "Please enter a valid spender address");
         return allowances[_owner][_spender];
     };
 
     function approve(address _owner, address _spender, uint256 _amount) public returns (bool success) {
-        require(_owner == msg.sender, "Cannot approve without the owner's approval");
+        require(_owner == msg.sender, "Cannot approve without the owner's confirmation");
         require(_spender != address(0), "Cannot give approval to a zero address");
 
         allowances[_owner][_spender] = _amount;
@@ -75,8 +86,8 @@ contract ERC20 {
         require(_amount >= balanceOf(_from), "The amount exceeds the balance of the sender's address.");
 
 
-        balances[_from] = balances[_from] -= amount;
-        balances[_to] = balances[_to] += amount;
+        balances[_from] = balances[_from] -= _amount;
+        balances[_to] = balances[_to] += _amount;
 
         emit Transfer(_from, _to, _amount); // Fill in.
 
@@ -105,37 +116,48 @@ contract ERC20 {
         require(_owner == msg.sender, "Only the owner can decrease the allowance");
 
         allowances[_owner][_spender] = 0;
-        allowances[_owner][_spender] = _anewValue;
+        allowances[_owner][_spender] = _newValue;
 
         return true;
 
     };
 
     function mint() public payable {
-        require(msg.value > tokenPrice, "Not enough ether sent");
         require(tokenSupply > 0, "Not enough supply");
+        require(msg.value > tokenPrice, "Not enough ether sent");
         
-        
+        uint256 mintAmount = totalSupply / msg.value;
 
-        // Need to check and make sure that the value send does not exceed the total supply of tokens.
+        require(mintAmount < tokenSupply, "Not enough Token Supply");
 
-
+        totalSupply -= mintAmount;
+        balances[msg.sender] = mintAmount;
 
     };
+
+
+
+
+    modifier onlyOwner() {
+        require(msg.sender == _contractOwner, "Not the owner");
+        _;
+    };
+
+    function etherTransfer(address _to) public onlyOwner {
+        (bool sent, bytes memory data) = _to.call{value: address(this).balance}("");
+        require(sent, "Failed to send Ether");
+    } 
+
+
+
 
     event Transfer(address _from, address _to, uint256 _amount);
 
     event Approval(address _owner, address _spender, uint256 _amount);
 
-    
-    
-
-
-
     receive() external payable {};
 
     fallback() external payable {};
-
 
 
 }
