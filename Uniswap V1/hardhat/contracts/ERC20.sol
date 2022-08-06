@@ -12,6 +12,10 @@ contract ERC20 {
     uint256 public tokenSupply = 1000000;
 
     mapping public (address owner => uint256 balance) balances;
+    
+    mapping private (address _owner => mapping(address _spender => uint256 _amount)) allowances;
+
+    
 
 
 
@@ -25,61 +29,69 @@ contract ERC20 {
 
     };
 
-    name () public view returns (string) {
+    function name () public view returns (string) {
         return tokenName;
     };
 
 
 
-    symbol () public view returns (string) {
+    function symbol () public view returns (string) {
         return tokenSymbol;
     };
 
-    decimals () public view returns (uint256) {
+    function decimals () public view returns (uint256) {
         return tokenDecimals;
     };
 
-    totalSupply () public view returns (uint256) {
+    function totalSupply () public view returns (uint256) {
         return tokenSupply;
     };
 
-    balanceOf(address _owner) public view returns (uint256) {
+    function balanceOf(address _owner) public view returns (uint256) {
         // Check if the address is 0x0?
         return balances(_owner);
     };
 
-    transferFrom(address _from, address _to, uint256 _amount) public returns (bool success) {
-        require(_from != 0x0, "Cannot transfer from the zero address.");
-        require(_to != 0x0, "Cannot transfer to the zero address.");
+    function transferFrom(address _from, address _to, uint256 _amount) public returns (bool success) {
+        require(_from != address(0), "Cannot transfer from the zero address.");
+        require(_to != address(0), "Cannot transfer to the zero address.");
         require(_amount >= balanceOf(_from), "the amount exceeds the balance of the address.");
 
-        balances(_from) = balances(_from) -= amount;
-        balances(_to) = balances(_to) += amount;
+        balances[_from] = balances[_from] -= amount;
+        balances[_to] = balances[_to] += amount;
 
-        emit Transfer; // Fill in.
+        emit Transfer(_from, _to, _amount); // Fill in.
 
         return true;
 
     };
 
 
-    approve(address _owner, address _spender, uint256 _amount) public returns (bool success) {
+    function approve(address _owner, address _spender, uint256 _amount) public returns (bool success) {
+        require(_owner == msg.sender, "Cannot approve without the owner's approval");
+        require(_spender != address(0), "Cannot give approval to a zero address");
 
+        allowances[_owner][_spender] = _amount;
+
+        emit Approval(_owner, _spender, _amount);
     };
 
-    allowance() {};
+    function allowance(address _owner, address _spender) {
+        require(_owner != address(0), "Please enter a valid account.");
+        return allowances[_owner][_spender];
+    };
 
     // Events
 
-    Transfer() {};
+    event Transfer(address _from, address _to, uint256 _amount);
 
-    Approval () {};
+    event Approval (address _owner, address _spender, uint256 _amount);
 
     // only owner function modifier () {};
 
     // transfer the contract's balance from the contract to the owner.
 
-    mint() {};
+    function mint() {};
 
 
 
