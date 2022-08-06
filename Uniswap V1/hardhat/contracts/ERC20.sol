@@ -48,7 +48,7 @@ contract ERC20 {
         return balances(_owner);
     };
 
-    transferFrom(address _from, address _to, uint256 _amount) public view returns (bool success) {
+    transferFrom(address _from, address _to, uint256 _amount) public returns (bool success) {
         require(_from != 0x0, "Cannot transfer from the zero address.");
         require(_to != 0x0, "Cannot transfer to the zero address.");
         require(_amount >= balanceOf(_from), "the amount exceeds the balance of the address.");
@@ -56,15 +56,16 @@ contract ERC20 {
         balances(_from) = balances(_from) -= amount;
         balances(_to) = balances(_to) += amount;
 
-        emit Transfer;
+        emit Transfer; // Fill in.
 
         return true;
 
     };
 
-    mint() {};
 
-    approve() {};
+    approve(address _owner, address _spender, uint256 _amount) public returns (bool success) {
+
+    };
 
     allowance() {};
 
@@ -77,6 +78,8 @@ contract ERC20 {
     // only owner function modifier () {};
 
     // transfer the contract's balance from the contract to the owner.
+
+    mint() {};
 
 
 
