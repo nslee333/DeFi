@@ -149,8 +149,6 @@ contract ERC20 {
     } 
 
 
-
-
     event Transfer(address _from, address _to, uint256 _amount);
 
     event Approval(address _owner, address _spender, uint256 _amount);
