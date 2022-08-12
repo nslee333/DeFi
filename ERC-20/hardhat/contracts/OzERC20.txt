@@ -1,6 +1,6 @@
 pragma solidity ^0.8.9;
 
-contract ERC20 {
+contract OzERC20 {
 
     string public tokenName;
 

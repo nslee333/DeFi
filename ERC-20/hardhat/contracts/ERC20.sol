@@ -15,41 +15,40 @@ contract ERC20 {
 
     uint256 public tokenPrice = 0.000001 ether;
 
-    mapping(address owner => uint256 balance) public balances;
+    mapping(address => uint256) public balances;
     
-    mapping(address _owner => mapping(address _spender => uint256 _amount)) private allowances;
+    mapping(address => mapping(address => uint256)) private allowances;
 
     address private _contractOwner; 
 
-    constructor(string _name, string _symbol) {
-        // need to initialize the name and symbol of the token.
+    constructor(string memory _name, string memory _symbol) {
         tokenName = _name;
         tokenSymbol = _symbol;
-        _contractOwner = msg.sender();
+        _contractOwner = msg.sender;
 
-    };
+    }
 
-    function name() public view returns (string) {
+    function name() public view returns (string memory) {
         return tokenName;
-    };
+    }
 
 
 
-    function symbol() public view returns (string) {
+    function symbol() public view returns (string memory) {
         return tokenSymbol;
-    };
+    }
 
     function decimals() public view returns (uint256) {
         return tokenDecimals;
-    };
+    }
 
     function totalSupply() public view returns (uint256) {
         return totalTokenSupply;
-    };
+    }
 
     function balanceOf(address _owner) public view returns (uint256) {
         return balances[_owner];
-    };
+    }
 
 
     function transfer(address _to, uint256 _amount) public  {
@@ -60,22 +59,22 @@ contract ERC20 {
         balances[_to] += _amount;
 
         emit Transfer(msg.sender, _to, _amount);
-    };
+    }
 
     function allowance(address _owner, address _spender) public view returns (uint256) {
         require(_owner != address(0), "Please enter a valid owner account.");
         require(_spender != address(0), "Please enter a valid spender address");
         return allowances[_owner][_spender];
-    };
+    }
 
-    function approve(address _owner, address _spender, uint256 _amount) public returns (bool success) {
+    function approve(address _owner, address _spender, uint256 _amount) public {
         require(_owner == msg.sender, "Cannot approve without the owner's confirmation");
         require(_spender != address(0), "Cannot give approval to a zero address");
 
         allowances[_owner][_spender] = _amount;
 
         emit Approval(_owner, _spender, _amount);
-    };
+    }
 
 
 
@@ -93,7 +92,7 @@ contract ERC20 {
 
         return true;
 
-    };
+    }
 
 
 
@@ -107,7 +106,7 @@ contract ERC20 {
         allowances[_owner][_spender] = _newValue;
 
         return true;
-    };
+    }
 
     function decreaseAllowance(address _owner, address _spender, uint256 _newValue) public returns (bool success) {
         require(_owner != address(0), "Cannot withdraw funds from address(0)");
@@ -120,20 +119,20 @@ contract ERC20 {
 
         return true;
 
-    };
+    }
 
     function mint() public payable {
         require(tokenSupply > 0, "Not enough supply");
         require(msg.value > tokenPrice, "Not enough ether sent");
         
-        uint256 mintAmount = totalSupply / msg.value;
+        uint256 mintAmount = tokenSupply / msg.value;
 
         require(mintAmount < tokenSupply, "Not enough Token Supply");
 
-        totalSupply -= mintAmount;
+        tokenSupply -= mintAmount;
         balances[msg.sender] = mintAmount;
 
-    };
+    }
 
 
 
@@ -141,10 +140,10 @@ contract ERC20 {
     modifier onlyOwner() {
         require(msg.sender == _contractOwner, "Not the owner");
         _;
-    };
+    }
 
     function etherTransfer(address _to) public onlyOwner {
-        (bool sent, bytes memory data) = _to.call{value: address(this).balance}("");
+        (bool sent,) = _to.call{value: address(this).balance}("");
         require(sent, "Failed to send Ether");
     } 
 
@@ -153,9 +152,9 @@ contract ERC20 {
 
     event Approval(address _owner, address _spender, uint256 _amount);
 
-    receive() external payable {};
+    receive() external payable {}
 
-    fallback() external payable {};
+    fallback() external payable {}
 
 
 }
