@@ -1,9 +1,9 @@
-import { getContractFactory } from 'ethers';
+const { ethers } = require("Hardhat");
+
 
 async function main() {
   
-
-  const deploy1 = await getContractFactory("ERC20");
+  const deploy1 = await ethers.getContractFactory("ERC20");
 
   const deployedContract = await deploy1.deploy("NateToken", "NT");
 
@@ -15,6 +15,7 @@ async function main() {
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main()
+.then(() => process.exit(0))
 .catch((error) => {
   console.error(error);
   process.exitCode = 1;

@@ -1,8 +1,100 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { ethers } from "ethers";
+import Web3Modal from "web3modal";
+import { useEffect, useState, useRef } from 'react';
+
 
 export default function Home() {
+
+
+
+  const [walletConnected, setWalletConnected] = useState(false);
+  const web3ModalRef = useRef();
+
+
+    const connectWallet = async () => {
+      try {
+        getProviderOrSigner();
+        setWalletConnected(true);
+      } catch (error) {
+       console.error(error) 
+      }
+    }
+  
+  
+
+
+ 
+
+    useEffect(() => {
+      if(!walletConnected) {
+        web3ModalRef.current = new Web3Modal({
+          network: "goerli",
+          providerOptions: {},
+          disableInjectedProvider: false,
+        });
+      }
+    })
+    
+
+
+  const getProviderOrSigner = async (needSigner = false) => {
+    const provider = await web3ModalRef.current.connect;
+    const web3Provider  = new provider.Web3Provider(provider);
+  
+    const {chainId} = await web3Provider.getNetwork();
+    if(chainId !== 5) {
+      window.alert("Change the network to goerli");
+      throw new Error("Change the network to Goerli");
+    }
+
+    if (needSigner) {
+      let signer = provider.getSigner();
+      return signer;
+    }
+    return web3Provider;
+  }
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -16,8 +108,18 @@ export default function Home() {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        
-
+            {
+              {walletConnected} ? 
+              ( 
+                <div className={styles.container}>
+                  <button onClick={connectWallet()}>Connect Wallet</button> 
+                </div>
+              ) : (
+                <div>
+                  <button>Test</button>
+                </div>
+              )
+            }
 
 
 

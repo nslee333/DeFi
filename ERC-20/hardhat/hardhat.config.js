@@ -1,4 +1,6 @@
 require('dotenv').config();
+require("@nomicfoundation/hardhat-toolbox");
+
 
 const ALCHEMY_KEY = process.env.ALCHEMY_API_KEY_URL;
 const GOERLI_PRIVATE_KEY = process.env.GOERLI_PRIVATE_KEY;
