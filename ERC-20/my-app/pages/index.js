@@ -1,32 +1,31 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { ethers } from "ethers";
+import { ethers, providers, getNetwork } from "ethers";
 import Web3Modal from "web3modal";
 import { useEffect, useState, useRef } from 'react';
+import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../constants.js" 
 
 
-export default function Home() {
-
-
+export  default function Home() {
 
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
 
 
+  
+
+
     const connectWallet = async () => {
       try {
-        getProviderOrSigner();
+        await getProviderOrSigner();
         setWalletConnected(true);
+        console.log(walletConnected);
       } catch (error) {
        console.error(error) 
       }
     }
   
-  
-
-
- 
 
     useEffect(() => {
       if(!walletConnected) {
@@ -35,15 +34,15 @@ export default function Home() {
           providerOptions: {},
           disableInjectedProvider: false,
         });
+         connectWallet();
       }
-    })
+    }, [walletConnected])
     
 
-
   const getProviderOrSigner = async (needSigner = false) => {
-    const provider = await web3ModalRef.current.connect;
-    const web3Provider  = new provider.Web3Provider(provider);
-  
+    const provider = await web3ModalRef.current.connect();
+    const web3Provider = new providers.Web3Provider(provider);
+    
     const {chainId} = await web3Provider.getNetwork();
     if(chainId !== 5) {
       window.alert("Change the network to goerli");
@@ -51,46 +50,99 @@ export default function Home() {
     }
 
     if (needSigner) {
-      let signer = provider.getSigner();
+      let signer = web3Provider.getSigner();
       return signer;
     }
     return web3Provider;
   }
 
+
   
+  const contractInstance = async (needSigner = false) => {
+
+    let providerInstance = await getProviderOrSigner();
+    let signerInstance = await getProviderOrSigner(true);
+
+    if (needSigner) {
+      let signerInstance = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        CONTRACT_ABI,
+        signerInstance,
+      )
+      return signerInstance;
+    } else {
+      let providerInstance = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        CONTRACT_ABI,
+        providerInstance,
+      )
+      return providerInstance;
+    }
+  };
+
+
+  console.log(contractInstance(true), "HI");
+
+  const mintTokens = async () => {};
+
+
+
+  const viewPropertiesOfContract = async () => {
+
+    let instance = await contractInstance();
+
+    let tx = await instance.name();
+    await tx.wait();
+    console.log(tx);
+
+    tx = await instance.symbol();
+    await tx.wait();
+    console.log(tx);
+
+    tx = await instance.decimals();
+    await tx.wait();
+    console.log(tx);
+
+    tx = await instance.totalSupply();
+    await tx.wait();
+    console.log(tx);
+
+
+
+  };
+
+  const propertyCall = async () => {
+    let result = await viewPropertiesOfContract();
+    return result;
+  }
 
 
 
 
+  const renderButton = () => {
+   
+        if(!walletConnected) {
+          return (
+            <div className={styles.container}>
+            <button onClick={connectWallet}>Connect Wallet</button> 
+            </div>
+          )
+        }
 
+        if(walletConnected) {
+          return (
+            <div>
+            <button className={styles.button}>Mint Tokens</button>
+            <button className={styles.button} onClick={propertyCall}>See Props</button>
+            <button className={styles.button}>Test 3</button>
+            <button className={styles.button}>Test 4</button>
+          </div>
+          )
 
+        }
+        
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  }
 
 
 
@@ -105,32 +157,9 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Testing App
         </h1>
-
-            {
-              {walletConnected} ? 
-              ( 
-                <div className={styles.container}>
-                  <button onClick={connectWallet()}>Connect Wallet</button> 
-                </div>
-              ) : (
-                <div>
-                  <button>Test</button>
-                </div>
-              )
-            }
-
-
-
-
-
-
-
-
-
-
-        
+        {renderButton()}
       </main>
 
       <footer className={styles.footer}>

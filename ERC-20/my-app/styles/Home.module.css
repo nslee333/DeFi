@@ -2,6 +2,11 @@
   padding: 0 2rem;
 }
 
+.button {
+  height: 75px;
+  width: 100px;
+  margin: 5px;
+}
 .main {
   min-height: 100vh;
   padding: 4rem 0;
