@@ -12,7 +12,6 @@ export  default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
 
-  console.log(walletConnected, "value of walletConnected");
 
   const connectWallet = async () => {
     try {
@@ -55,26 +54,43 @@ export  default function Home() {
 
 
   
-  const contractInstance = async (needSigner = false) => {
+  // const contractInstance = async (needSigner = false) => {
 
-    let providerInstance = await getProviderOrSigner();
-    let signerInstance = await getProviderOrSigner(true);
+  //   let providerInstance = await getProviderOrSigner();
+  //   let signerInstance = await getProviderOrSigner(true);
 
-    if (needSigner) {
-      let signerInstance = new ethers.Contract(
+  //   if (needSigner) {
+  //     let signerInstance = new ethers.Contract(
+  //       CONTRACT_ADDRESS,
+  //       CONTRACT_ABI,
+  //       signerInstance,
+  //     )
+  //     return signerInstance;
+  //   } else {
+  //     let providerInstance = new ethers.Contract(
+  //       CONTRACT_ADDRESS,
+  //       CONTRACT_ABI,
+  //       providerInstance,
+  //     )
+  //     return providerInstance;
+  //   }
+  // };
+
+  const contractInstance = async (providerOrSigner) => {
+    try {
+
+      const instance = new ethers.Contract(
         CONTRACT_ADDRESS,
         CONTRACT_ABI,
-        signerInstance,
+        providerOrSigner,
       )
-      return signerInstance;
-    } else {
-      let providerInstance = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        CONTRACT_ABI,
-        providerInstance,
-      )
-      return providerInstance;
+      return instance;
+      
+    } catch (error) {
+      console.error(error)
+      
     }
+    
   };
 
 
@@ -84,26 +100,40 @@ export  default function Home() {
 
 
   const viewPropertiesOfContract = async () => {
+    try {
 
-    let instance = await contractInstance();
+      // let signer = await getProviderOrSigner(true);
 
-    let tx = await instance.name();
-    await tx.wait();
-    console.log(tx);
+      // const contract = new ethers.Contract(
+      //   CONTRACT_ADDRESS,
+      //   CONTRACT_ABI,
+      //   signer
+      // )
 
-    tx = await instance.symbol();
-    await tx.wait();
-    console.log(tx);
+      let signer = await getProviderOrSigner(true);
 
-    tx = await instance.decimals();
-    await tx.wait();
-    console.log(tx);
+      const instance = await contractInstance(signer);
 
-    tx = await instance.totalSupply();
-    await tx.wait();
-    console.log(tx);
+      // let tx = await contract.name();
+      let tx = await instance.name();
+      await tx.wait();
+      console.log(tx, "tx");
 
+    // tx = await instance.symbol();
+    // await tx.wait();
+    // console.log(tx);
 
+    // tx = await instance.decimals();
+    // await tx.wait();
+    // console.log(tx);
+
+    // tx = await instance.totalSupply();
+    // await tx.wait();
+    // console.log(tx);
+      
+    } catch (error) {
+      console.error(error);
+    }
 
   };
 

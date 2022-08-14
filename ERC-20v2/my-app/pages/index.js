@@ -53,68 +53,64 @@ export default function Home() {
   }, [walletConnected]);
 
 
- const contractInstance = async (needSigner = false) => {
+//  const contractInstance = async (needSigner = false) => {
 
-  try {
+//   try {
 
-    const providerInstance = await getProviderOrSigner();
-    const signerInstance = await getProviderOrSigner(true);
+//     const providerInstance = await getProviderOrSigner();
+//     const signerInstance = await getProviderOrSigner(true);
 
-    if (needSigner) {
-      // let signerInstance = new ethers.Contract(
-      //   CONTRACT_ADDRESS,
-      //   CONTRACT_ABI,
-      //   signerInstance,
-      // )
-      // return signerInstance;
-    } else {
-      let providerInstance = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        CONTRACT_ABI,
-        providerInstance,
-      )
-      return providerInstance;
-    }
-
-
-
-
+//     if (needSigner) {
+//       let signerInstance = new ethers.Contract(
+//         CONTRACT_ADDRESS,
+//         CONTRACT_ABI,
+//         signerInstance,
+//       )
+//       return signerInstance;
+//     } else {
+//       let providerInstance = new ethers.Contract(
+//         CONTRACT_ADDRESS,
+//         CONTRACT_ABI,
+//         providerInstance,
+//       )
+//       return providerInstance;
+//     }
 
 
     
-  } catch (error) {
-    console.error(error)
+//   } catch (error) {
+//     console.error(error)
     
-  }
-  };
+//   }
+//   };
 
 
 
 
 
-  const viewPropertiesOfContract = async () => {
+  // const viewPropertiesOfContract = async () => {
 
-    let instance = await contractInstance();
+  //   let instance = await contractInstance();
 
-    let tx = await instance.name();
-    await tx.wait();
-    console.log(tx);
+  //   let tx = await instance.name();
+  //   await tx.wait();
+  //   console.log(tx);
 
-    tx = await instance.symbol();
-    await tx.wait();
-    console.log(tx);
+  //   tx = await instance.symbol();
+  //   await tx.wait();
+  //   console.log(tx);
 
-    tx = await instance.decimals();
-    await tx.wait();
-    console.log(tx);
+  //   tx = await instance.decimals();
+  //   await tx.wait();
+  //   console.log(tx);
 
-    tx = await instance.totalSupply();
-    await tx.wait();
-    console.log(tx);
+  //   tx = await instance.totalSupply();
+  //   await tx.wait();
+  //   console.log(tx);
 
 
 
-  };
+  // };
 
   
   
