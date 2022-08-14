@@ -54,27 +54,6 @@ export  default function Home() {
 
 
   
-  // const contractInstance = async (needSigner = false) => {
-
-  //   let providerInstance = await getProviderOrSigner();
-  //   let signerInstance = await getProviderOrSigner(true);
-
-  //   if (needSigner) {
-  //     let signerInstance = new ethers.Contract(
-  //       CONTRACT_ADDRESS,
-  //       CONTRACT_ABI,
-  //       signerInstance,
-  //     )
-  //     return signerInstance;
-  //   } else {
-  //     let providerInstance = new ethers.Contract(
-  //       CONTRACT_ADDRESS,
-  //       CONTRACT_ABI,
-  //       providerInstance,
-  //     )
-  //     return providerInstance;
-  //   }
-  // };
 
   const contractInstance = async (providerOrSigner) => {
     try {
@@ -101,20 +80,10 @@ export  default function Home() {
 
   const viewPropertiesOfContract = async () => {
     try {
-
-      // let signer = await getProviderOrSigner(true);
-
-      // const contract = new ethers.Contract(
-      //   CONTRACT_ADDRESS,
-      //   CONTRACT_ABI,
-      //   signer
-      // )
-
       let signer = await getProviderOrSigner(true);
 
       const instance = await contractInstance(signer);
 
-      // let tx = await contract.name();
       let tx = await instance.name();
       await tx.wait();
       console.log(tx, "tx");
@@ -147,7 +116,7 @@ export  default function Home() {
         if(!walletConnected) {
           return (
             <div className={styles.container}>
-            <button onClick={connectWallet}>Connect Wallet</button> 
+            <button onClick={ () => connectWallet()}>Connect Wallet</button> 
             </div>
           )
         }
@@ -163,8 +132,6 @@ export  default function Home() {
           )
 
         }
-        
-
   }
 
 
