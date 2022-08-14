@@ -3,9 +3,9 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Web3Modal from "web3modal";
 import React, { useEffect, useState, useRef } from 'react';
-import {providers, ethers} from "ethers";
+import {providers} from "ethers";
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../constants.js" 
-
+const { ethers } = require("ethers");
 
 export  default function Home() {
 
@@ -85,8 +85,7 @@ export  default function Home() {
       const instance = await contractInstance(signer);
 
       const tx = await instance.name();
-      console.log(tx.wait());
-      await tx.wait();
+      console.log(tx);
       console.log(tx, "tx");
 
     // tx = await instance.symbol();
