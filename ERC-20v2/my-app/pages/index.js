@@ -2,17 +2,13 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Web3Modal from "web3modal";
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from "react";
 import {providers, ethers} from "ethers";
-import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../constants.js" 
 
-
-export  default function Home() {
-
+export default function Home() {
+  
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
-
-  console.log(walletConnected, "value of walletConnected");
 
   const connectWallet = async () => {
     try {
@@ -30,43 +26,47 @@ export  default function Home() {
 
     const { chainId } = await web3Provider.getNetwork();
     if (chainId !== 5) {
-      window.alert("Change the network to Goerli");
+      window.alert("Please change network to Goerli");
       throw new Error("Change the network to Goerli");
     }
 
     if (needSigner) {
-      const signer = web3Provider.getSigner();
+      const signer = web3Provider.getSigner()
       return signer;
     }
+
     return web3Provider;
   }
 
+
+
   useEffect(() => {
-    if (!walletConnected) {
+    if(!walletConnected){
       web3ModalRef.current = new Web3Modal({
         network: "goerli",
         providerOptions: {},
-        disableInjectedProvider: false,
-      });
-
+        disableInjectedProvider: false
+      })
       connectWallet();
+
     }
   }, [walletConnected]);
 
 
-  
-  const contractInstance = async (needSigner = false) => {
+ const contractInstance = async (needSigner = false) => {
 
-    let providerInstance = await getProviderOrSigner();
-    let signerInstance = await getProviderOrSigner(true);
+  try {
+
+    const providerInstance = await getProviderOrSigner();
+    const signerInstance = await getProviderOrSigner(true);
 
     if (needSigner) {
-      let signerInstance = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        CONTRACT_ABI,
-        signerInstance,
-      )
-      return signerInstance;
+      // let signerInstance = new ethers.Contract(
+      //   CONTRACT_ADDRESS,
+      //   CONTRACT_ABI,
+      //   signerInstance,
+      // )
+      // return signerInstance;
     } else {
       let providerInstance = new ethers.Contract(
         CONTRACT_ADDRESS,
@@ -75,12 +75,21 @@ export  default function Home() {
       )
       return providerInstance;
     }
+
+
+
+
+
+
+    
+  } catch (error) {
+    console.error(error)
+    
+  }
   };
 
 
 
-  // const mintTokens = async () => {};
-  
 
 
   const viewPropertiesOfContract = async () => {
@@ -108,38 +117,39 @@ export  default function Home() {
   };
 
   
-
-
-
-
-  const renderButton = () => {
-   
-        if(!walletConnected) {
-          return (
-            <div className={styles.container}>
-            <button onClick={connectWallet}>Connect Wallet</button> 
-            </div>
-          )
-        }
-
-        if(walletConnected) {
-          return (
-            <div>
-            <button className={styles.button}>Mint Tokens</button>
-            <button className={styles.button} onClick={viewPropertiesOfContract}>See Props</button>
-            <button className={styles.button}>Test 3</button>
-            <button className={styles.button}>Test 4</button>
-          </div>
-          )
-
-        }
-        
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  function renderButton() {
+    return (
+      <button>Hi There</button>
+    )
 
   }
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   return (
     <div className={styles.container}>
       <Head>
@@ -149,10 +159,10 @@ export  default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Testing App
-        </h1>
-        {renderButton()}
+        
+      {renderButton()}
+        
+          
       </main>
 
       <footer className={styles.footer}>
