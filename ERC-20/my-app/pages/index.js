@@ -84,7 +84,8 @@ export  default function Home() {
 
       const instance = await contractInstance(signer);
 
-      let tx = await instance.name();
+      const tx = await instance.name();
+      console.log(tx.wait());
       await tx.wait();
       console.log(tx, "tx");
 

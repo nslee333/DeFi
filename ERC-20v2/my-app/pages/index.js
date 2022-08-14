@@ -4,6 +4,8 @@ import styles from '../styles/Home.module.css'
 import Web3Modal from "web3modal";
 import React, { useEffect, useState, useRef } from "react";
 import {providers, ethers} from "ethers";
+import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../constants';
+const { ethers } = require("ethers");
 
 export default function Home() {
   
@@ -53,64 +55,57 @@ export default function Home() {
   }, [walletConnected]);
 
 
-//  const contractInstance = async (needSigner = false) => {
+  const contractInstance = async (providerOrSigner) => {
+    try {
 
-//   try {
-
-//     const providerInstance = await getProviderOrSigner();
-//     const signerInstance = await getProviderOrSigner(true);
-
-//     if (needSigner) {
-//       let signerInstance = new ethers.Contract(
-//         CONTRACT_ADDRESS,
-//         CONTRACT_ABI,
-//         signerInstance,
-//       )
-//       return signerInstance;
-//     } else {
-//       let providerInstance = new ethers.Contract(
-//         CONTRACT_ADDRESS,
-//         CONTRACT_ABI,
-//         providerInstance,
-//       )
-//       return providerInstance;
-//     }
-
-
+      const instance = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        CONTRACT_ABI,
+        providerOrSigner,
+      )
+      return instance;
+      
+    } catch (error) {
+      console.error(error)
+      
+    }
     
-//   } catch (error) {
-//     console.error(error)
-    
-//   }
-//   };
+  };
 
 
 
+  // const mintTokens = async () => {};
+  
 
 
-  // const viewPropertiesOfContract = async () => {
+  const viewPropertiesOfContract = async () => {
+    try {
+      let signer = await getProviderOrSigner(true);
 
-  //   let instance = await contractInstance();
+      const instance = await contractInstance(signer);
 
-  //   let tx = await instance.name();
-  //   await tx.wait();
-  //   console.log(tx);
+      const tx = await instance.name();
+      console.log(tx.wait());
+      await tx.wait();
+      console.log(tx, "tx");
 
-  //   tx = await instance.symbol();
-  //   await tx.wait();
-  //   console.log(tx);
+    // tx = await instance.symbol();
+    // await tx.wait();
+    // console.log(tx);
 
-  //   tx = await instance.decimals();
-  //   await tx.wait();
-  //   console.log(tx);
+    // tx = await instance.decimals();
+    // await tx.wait();
+    // console.log(tx);
 
-  //   tx = await instance.totalSupply();
-  //   await tx.wait();
-  //   console.log(tx);
+    // tx = await instance.totalSupply();
+    // await tx.wait();
+    // console.log(tx);
+      
+    } catch (error) {
+      console.error(error);
+    }
 
-
-
-  // };
+  };
 
   
   
@@ -126,7 +121,7 @@ export default function Home() {
   
   function renderButton() {
     return (
-      <button>Hi There</button>
+      <button onClick={() => viewPropertiesOfContract()}>Hi There</button>
     )
 
   }
