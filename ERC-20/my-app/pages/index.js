@@ -130,6 +130,7 @@ export  default function Home() {
       console.log(ethers.utils.parseEther(value.toString()))
 
       const tx = await instance.mint(
+        value,
         {
           value: utils.parseEther(value.toString()),
         } 
@@ -137,8 +138,8 @@ export  default function Home() {
       await tx.wait();
 
 
-      const confirmation = await instance.balanceOf(signer.address);
-      console.log(confirmation);
+      // const confirmation = await instance.balanceOf(signer.address);
+      // console.log(confirmation);
 
       
     } catch (error) {

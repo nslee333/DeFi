@@ -134,10 +134,19 @@ contract ERC20 {
 
         require(mintAmount < tokenSupply, "Not enough Token Supply");
 
+        console.log(mintAmount, "Mint amount");
+        console.log(value, "Value");
+        console.log(balances[msg.sender], "balance of msg.sender");
+        // console.log(tokenSupply, newTokenSupply);
+        // console.log(tokenSupply -= mintAmount);
+        
+
         uint256 newTokenSupply = tokenSupply - mintAmount;
         console.log(tokenSupply, newTokenSupply);
         tokenSupply = newTokenSupply;
         balances[msg.sender] += mintAmount;
+        console.log(balances[msg.sender], "balance of msg.sender");
+        console.log(tokenSupply, "current token supply");
 
     }
 
