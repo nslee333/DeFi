@@ -2,8 +2,6 @@
 pragma solidity ^0.8.9;
 
 
-import "hardhat/console.sol";
-
 contract ERC20 {
 
     string public tokenName;
@@ -135,7 +133,6 @@ contract ERC20 {
         require(mintAmount < tokenSupply, "Not enough Token Supply");
 
         uint256 newTokenSupply = tokenSupply - mintAmount;
-        console.log(tokenSupply, newTokenSupply);
         tokenSupply = newTokenSupply;
         balances[msg.sender] += mintAmount;
 
