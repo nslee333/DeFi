@@ -3,14 +3,15 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Web3Modal from "web3modal";
 import React, { useEffect, useState, useRef } from 'react';
-import {providers} from "ethers";
+import {providers, BigNumber, ethers, utils } from "ethers";
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../constants.js" 
-const { ethers } = require("ethers");
 
 export  default function Home() {
 
   const [walletConnected, setWalletConnected] = useState(false);
+  const [tokenAmount, setTokenAmount] = useState(0);
   const web3ModalRef = useRef();
+  console.log(tokenAmount);
 
 
   const connectWallet = async () => {
@@ -70,12 +71,7 @@ export  default function Home() {
       
     }
     
-  };
-
-
-
-  // const mintTokens = async () => {};
-  
+  }; 
 
 
   const viewPropertiesOfContract = async () => {
@@ -86,27 +82,158 @@ export  default function Home() {
 
       const tx = await instance.name();
       console.log(tx);
-      console.log(tx, "tx");
 
-    // tx = await instance.symbol();
-    // await tx.wait();
-    // console.log(tx);
+      tx = await instance.symbol();
+      console.log(tx);
 
-    // tx = await instance.decimals();
-    // await tx.wait();
-    // console.log(tx);
+      tx = await instance.decimals();
+      let result = tx.toString();
+      console.log(result);
 
-    // tx = await instance.totalSupply();
-    // await tx.wait();
-    // console.log(tx);
-      
-    } catch (error) {
-      console.error(error);
+      tx = await instance.totalSupply();
+      result = tx.toString();
+      console.log(result);
+        
+      } catch (error) {
+        console.error(error);
     }
 
   };
 
   
+
+
+  const transferTokens = async () => {};
+
+  const giveAllowance = async () => {};
+
+  const approve = async () => {};
+
+  const transferFrom = async () => {};
+
+  const increaseAllowance = async () => {};
+
+  const decreaseAllowance = async () => {};
+
+
+
+
+
+  const mintTokens = async (tokensToMint) => {
+    try {
+
+      const signer = await getProviderOrSigner(true);
+      const instance = await contractInstance(signer);
+
+      const value = 0.001 * tokensToMint;
+
+      console.log(ethers.utils.parseEther(value.toString()))
+
+      const tx = await instance.mint(
+        {
+          value: utils.parseEther(value.toString()),
+        } 
+      );
+      await tx.wait();
+
+
+      const confirmation = await instance.balanceOf(signer.address);
+      console.log(confirmation);
+
+      
+    } catch (error) {
+      console.error(error);
+    }
+    
+
+
+
+  };
+
+
+
+
+
+
+
+  const confirm = async () => {
+    try {
+      const signer = await getProviderOrSigner(true);
+      const contract = await contractInstance(signer);
+
+      let address = await signer.getAddress();
+
+      
+      const total = await contract.totalSupply();
+      console.log(total.toString(), "TotalSupply()");
+
+      const tx = await contract.balanceOf(address);
+      console.log(tx.toString());
+
+
+
+
+
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
+
+
+
+
+
+
+
+
+  const etherTransfer = async () => {};
+
+  // Log the events of approval and transfer.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -116,18 +243,38 @@ export  default function Home() {
         if(!walletConnected) {
           return (
             <div className={styles.container}>
-            <button onClick={ () => connectWallet()}>Connect Wallet</button> 
+            <button onClick={connectWallet}>Connect Wallet</button> 
             </div>
           )
         }
 
         if(walletConnected) {
           return (
-            <div>
-            <button className={styles.button}>Mint Tokens</button>
-            <button className={styles.button} onClick={viewPropertiesOfContract}>See Props</button>
-            <button className={styles.button}>Test 3</button>
-            <button className={styles.button}>Test 4</button>
+
+          <div>
+              <div>
+                <div>
+                <input 
+                  type="number" 
+                  placeholder="Amount Of Tokens"
+                  onChange={(e) => {setTokenAmount(BigNumber.from(e.target.value))}}
+                ></input>
+                <button 
+                  className={styles.button} 
+                  onClick={async () => await mintTokens(tokenAmount)}
+                  
+                  >Mint Tokens</button>
+                </div>
+              </div>
+            
+
+            
+              <div>
+                <button className={styles.button} onClick={viewPropertiesOfContract}>See Props</button>
+                <button className={styles.button} onClick={confirm}>Confirm</button>
+                <button className={styles.button}>Test 4</button>
+              </div>
+            
           </div>
           )
 
