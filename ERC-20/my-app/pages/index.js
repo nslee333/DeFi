@@ -3,7 +3,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Web3Modal from "web3modal";
 import React, { useEffect, useState, useRef } from 'react';
-import {providers, BigNumber, ethers, utils } from "ethers";
+import {providers, BigNumber, ethers, utils, FixedNumber } from "ethers";
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../constants.js" 
 
 export  default function Home() {
@@ -125,14 +125,25 @@ export  default function Home() {
       const signer = await getProviderOrSigner(true);
       const instance = await contractInstance(signer);
 
-      const value = 0.001 * tokensToMint;
+      const value = 0.000001 * tokensToMint;
 
-      console.log(ethers.utils.parseEther(value.toString()))
+      console.log(value)
+
+      const newValue = FixedNumber.from(value.toString());
+      console.log(newValue);
+
+
+
+
+      
+
+
+
 
       const tx = await instance.mint(
-        value,
+        tokensToMint,
         {
-          value: utils.parseEther(value.toString()),
+          value: utils.parseEther(newValue.toString()),
         } 
       );
       await tx.wait();
@@ -169,7 +180,7 @@ export  default function Home() {
       console.log(total.toString(), "TotalSupply()");
 
       const tx = await contract.balanceOf(address);
-      console.log(tx.toString());
+      console.log(tx.toString(), "balance of address");
 
 
 
@@ -258,11 +269,13 @@ export  default function Home() {
                 <input 
                   type="number" 
                   placeholder="Amount Of Tokens"
-                  onChange={(e) => {setTokenAmount(BigNumber.from(e.target.value))}}
+                  onChange={(e) => {setTokenAmount(BigNumber.from(e.target.value)), console.log(e.target.value * 0.000001)}}
+                
                 ></input>
                 <button 
                   className={styles.button} 
                   onClick={async () => await mintTokens(tokenAmount)}
+
                   
                   >Mint Tokens</button>
                 </div>

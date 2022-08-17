@@ -16,13 +16,15 @@ contract ERC20 {
 
     uint256 public totalTokenSupply = 1000000 * 10**18; 
 
-    uint256 public tokenPrice = 0.000001 ether;
+    uint256 public tokenPrice = 1 wei;
 
     mapping(address => uint256) public balances;
     
     mapping(address => mapping(address => uint256)) private allowances;
 
     address private _contractOwner; 
+
+
 
     constructor(string memory _name, string memory _symbol) {
         tokenName = _name;
@@ -46,6 +48,8 @@ contract ERC20 {
     }
 
     function totalSupply() public view returns (uint256) {
+        console.log(tokenPrice, 1 ether);
+        console.log(balanceOf(msg.sender));
         return totalTokenSupply;
     }
 
@@ -125,6 +129,7 @@ contract ERC20 {
     }
 
     function mint(uint256 amount) public payable {
+        console.log(tokenPrice);
         require(tokenSupply > 0, "Not enough supply");
         require(msg.value > tokenPrice, "Not enough ether sent");
         uint256 value = tokenPrice * amount;
