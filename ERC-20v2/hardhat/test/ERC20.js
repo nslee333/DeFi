@@ -7,7 +7,7 @@ const { expect } = require("chai");
 const { utils, FixedNumber, BigNumber } = require("ethers");
 
 describe("ERC20", function () {
-  it("Should display the console.logs in the mint function", async () => {
+  it("Should Mint sucessfully", async () => {
     const deploy1 = await ethers.getContractFactory("ERC20");
     const deployedContract = await deploy1.deploy("Nate Token", "NT");
     await deployedContract.deployed();
@@ -15,7 +15,12 @@ describe("ERC20", function () {
 
 
 
-      const value = 0.0001 * 1;
+      const value = 0.000000000000000001 * 1;
+      const decimals = 18;
+
+
+      const newValue = utils.parseUnits(value.toString(), decimals);
+
 
     console.log(utils.parseEther(value.toString()));
 
@@ -24,7 +29,7 @@ describe("ERC20", function () {
       const txn = await deployedContract.mint(
         1,
         {
-          value: utils.parseEther(value.toString()),
+          value: utils.parseEther(newValue.toString()),
         } 
       );
       await txn.wait();

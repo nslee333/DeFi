@@ -126,31 +126,16 @@ export  default function Home() {
       const instance = await contractInstance(signer);
 
       const value = 0.000001 * tokensToMint;
-
-      console.log(value)
-
-      const newValue = FixedNumber.from(value.toString());
-      console.log(newValue);
-
-
-
-
       
-
-
 
 
       const tx = await instance.mint(
         tokensToMint,
         {
-          value: utils.parseEther(newValue.toString()),
+          value: utils.parseEther(value.toString()),
         } 
       );
       await tx.wait();
-
-
-      // const confirmation = await instance.balanceOf(signer.address);
-      // console.log(confirmation);
 
       
     } catch (error) {
