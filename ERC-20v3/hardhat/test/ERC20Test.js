@@ -17,10 +17,9 @@ describe("ERC20", function () {
 
 
       const value = 0.001 * 1;
+      // const decimals = 18;
 
       const newValue = utils.parseUnits(value.toString());
-      console.log(value);
-
       let one = 1;
 
 
@@ -31,7 +30,7 @@ describe("ERC20", function () {
         } 
       );
 
-      await txn.wait();
+      // await txn.wait();
 
 
 
