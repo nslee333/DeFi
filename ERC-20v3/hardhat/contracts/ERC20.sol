@@ -48,8 +48,6 @@ contract ERC20 {
     }
 
     function totalSupply() public view returns (uint256) {
-        console.log(tokenPrice, 1 ether);
-        console.log(balanceOf(msg.sender));
         return totalTokenSupply;
     }
 
@@ -129,7 +127,6 @@ contract ERC20 {
     }
 
     function mint(uint256 amount) public payable {
-        console.log(tokenPrice);
         require(tokenSupply > 0, "Not enough supply");
         require(msg.value > tokenPrice, "Not enough ether sent");
         uint256 value = tokenPrice * amount;
@@ -139,20 +136,10 @@ contract ERC20 {
 
         require(mintAmount < tokenSupply, "Not enough Token Supply");
 
-        console.log(mintAmount, "Mint amount");
-        console.log(value, "Value");
-        console.log(balances[msg.sender], "balance of msg.sender");
-        // console.log(tokenSupply, newTokenSupply);
-        // console.log(tokenSupply -= mintAmount);
-        
 
         uint256 newTokenSupply = tokenSupply - mintAmount;
-        console.log(tokenSupply, newTokenSupply);
         tokenSupply = newTokenSupply;
         balances[msg.sender] += mintAmount;
-        console.log(balances[msg.sender], "balance of msg.sender");
-        console.log(tokenSupply, "current token supply");
-
     }
 
 
