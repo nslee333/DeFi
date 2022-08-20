@@ -1,0 +1,3 @@
+const event = await expect(contract.approve(address1.address, address2.address, amount))
+    .to.emit(contract, "Approval")
+    .withArgs(address1.address, address2.address, amount);

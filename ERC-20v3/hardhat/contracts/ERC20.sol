@@ -76,6 +76,7 @@ contract ERC20 {
         require(_owner == msg.sender, "Cannot approve without the owner's confirmation");
         require(_spender != address(0), "Cannot give approval to a zero address");
 
+
         allowances[_owner][_spender] = _amount;
 
         emit Approval(_owner, _spender, _amount);
@@ -107,8 +108,11 @@ contract ERC20 {
         require(_newValue > 0, "Cannot increase allowance to zero");
         require(_owner == msg.sender, "Only the owner can increase the allowance");
         
+        console.log(allowances[_owner][_spender], "Allowance before change, should be 0.05 ether");
         allowances[_owner][_spender] = 0;
+        console.log(allowances[_owner][_spender], "Allowance after decrease to zero, should be 0. ");
         allowances[_owner][_spender] = _newValue;
+        console.log(allowances[_owner][_spender], "Allowance after change, should be the set value, 0.03");
 
         return true;
     }
@@ -118,9 +122,12 @@ contract ERC20 {
         require(_spender != address(0), "Spender cannot be address(0)");
         require(_newValue > 0, "Cannot decrease allowance to zero");
         require(_owner == msg.sender, "Only the owner can decrease the allowance");
-
+        
+        console.log(allowances[_owner][_spender], "Allowance before change, should be 0.05 ether");
         allowances[_owner][_spender] = 0;
+        console.log(allowances[_owner][_spender], "Allowance after decrease to zero, should be 0. ");
         allowances[_owner][_spender] = _newValue;
+        console.log(allowances[_owner][_spender], "Allowance after change, should be the set value, 0.03");
 
         return true;
 
