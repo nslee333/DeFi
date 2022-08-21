@@ -126,7 +126,7 @@ contract ERC20 {
         require(tokenSupply > 0, "Not enough supply");
         require(msg.value > tokenPrice, "Not enough ether sent");
         uint256 value = tokenPrice * amount;
-        require(msg.value > value, "Not enough Ether sent");
+        require(msg.value >= value, "Not enough Ether sent");
         
         uint256 mintAmount = tokenSupply - msg.value;
 

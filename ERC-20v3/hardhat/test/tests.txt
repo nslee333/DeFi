@@ -1,3 +1,16 @@
 const event = await expect(contract.approve(address1.address, address2.address, amount))
     .to.emit(contract, "Approval")
     .withArgs(address1.address, address2.address, amount);
+
+
+
+
+
+
+    const confirm = await contract.mint(
+        value2, 
+        {
+          value: utils.parseEther("1"),
+        }
+      );
+      console.log(confirm, "mint confirmation");

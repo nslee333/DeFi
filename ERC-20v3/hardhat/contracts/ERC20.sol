@@ -12,7 +12,7 @@ contract ERC20 {
 
     uint256 public tokenDecimals = 18;
 
-    uint256 public tokenSupply = 1000000 * 10**18; // 1 Million. 25 decimal places 
+    uint256 public tokenSupply = 1 * 10**18; // 1 Million. 25 decimal places 
 
     uint256 public totalTokenSupply = 1000000 * 10**18; 
 
@@ -137,9 +137,14 @@ contract ERC20 {
         require(tokenSupply > 0, "Not enough supply");
         require(msg.value > tokenPrice, "Not enough ether sent");
         uint256 value = tokenPrice * amount;
-        require(msg.value > value, "Not enough Ether sent");
+        // require(msg.value > value, "Not enough Ether sent");
+        console.log(tokenSupply, value);
+
+       
+        uint256 mintAmount = tokenSupply - value;
         
-        uint256 mintAmount = tokenSupply - msg.value;
+
+        console.log(tokenSupply, value, "tokenSupply and value");
 
         require(mintAmount < tokenSupply, "Not enough Token Supply");
 
