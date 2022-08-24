@@ -108,11 +108,8 @@ contract ERC20 {
         require(_newValue > 0, "Cannot increase allowance to zero");
         require(_owner == msg.sender, "Only the owner can increase the allowance");
         
-        console.log(allowances[_owner][_spender], "Allowance before change, should be 0.05 ether");
         allowances[_owner][_spender] = 0;
-        console.log(allowances[_owner][_spender], "Allowance after decrease to zero, should be 0. ");
         allowances[_owner][_spender] = _newValue;
-        console.log(allowances[_owner][_spender], "Allowance after change, should be the set value, 0.03");
 
         return true;
     }
@@ -123,11 +120,8 @@ contract ERC20 {
         require(_newValue > 0, "Cannot decrease allowance to zero");
         require(_owner == msg.sender, "Only the owner can decrease the allowance");
         
-        console.log(allowances[_owner][_spender], "Allowance before change, should be 0.05 ether");
         allowances[_owner][_spender] = 0;
-        console.log(allowances[_owner][_spender], "Allowance after decrease to zero, should be 0. ");
         allowances[_owner][_spender] = _newValue;
-        console.log(allowances[_owner][_spender], "Allowance after change, should be the set value, 0.03");
 
         return true;
 
@@ -138,13 +132,11 @@ contract ERC20 {
         require(msg.value > tokenPrice, "Not enough ether sent");
         uint256 value = tokenPrice * amount;
         // require(msg.value > value, "Not enough Ether sent");
-        console.log(tokenSupply, value);
 
        
         uint256 mintAmount = tokenSupply - value;
         
 
-        console.log(tokenSupply, value, "tokenSupply and value");
 
         require(mintAmount < tokenSupply, "Not enough Token Supply");
 
