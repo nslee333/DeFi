@@ -21,6 +21,7 @@ describe("ERC20", function () {
 
     let txn = await contract.name();
     console.log(txn);
+    expect(txn).to.equal("Nate Token");
 
   });
 
@@ -33,6 +34,7 @@ describe("ERC20", function () {
 
     let txn = await contract.symbol();
     console.log(txn);
+    expect(txn).to.equal("NT");
 
 
   });
@@ -44,6 +46,7 @@ describe("ERC20", function () {
 
     let txn = await contract.decimals();
     console.log(txn.toString());
+    expect(txn).to.equal(18);
 
   });
 
@@ -55,6 +58,7 @@ describe("ERC20", function () {
 
     let txn = await contract.totalSupply();
     console.log(txn.toString());
+    expect(txn).to.equal(BigNumber.from("1000000000000000000000000"));
     
   });
 
@@ -79,7 +83,7 @@ describe("ERC20", function () {
 
   });
 
-  it("Should test the second require statement by passing incorrect values to the function, should revert the transaction.", async () => {
+  it("Should test the second require statement of the mint function, should revert the transaction.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -91,7 +95,7 @@ describe("ERC20", function () {
       {
         value: utils.parseEther(value),
       }
-    )).to.be.reverted;
+    )).to.be.revertedWith("Not enough ether sent.");
 
   });
 
@@ -110,14 +114,11 @@ describe("ERC20", function () {
     let tx = await contract.approve(
       address1.address, 
       address2.address,
-      value2,
-      {
-        value: utils.parseEther(value),
-      } 
+      value2
     );
     await tx.wait();
 
-    expect(tx.value).to.equal(value2);
+    expect(tx).to.not.be.reverted;
 
   });
 
@@ -132,7 +133,9 @@ describe("ERC20", function () {
 
 
     let tx = await contract.approve(address1.address, address2.address, value);
-    await tx.wait(); // Add an expect assertion here?
+    await tx.wait(); 
+
+    expect(tx).to.not.be.reverted;
 
     await expect(contract.approve(address1.address, address2.address, value))
     .to.emit(contract, "Approval")
@@ -142,8 +145,6 @@ describe("ERC20", function () {
 
   
   it("Calls the approve function with a signer that is not the owner of the funds, should revert transaction.", async () => {
-
-    // Doesn't work right now, not sure if this is possible.
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -154,7 +155,7 @@ describe("ERC20", function () {
 
     const value = utils.parseEther("0.0001");
 
-    await expect (connectedContract.approve(address1.address, address2.address, value)).to.be.reverted;
+    await expect (connectedContract.approve(address1.address, address2.address, value)).to.be.revertedWith("Cannot approve without the owner's confirmation.");
 
   });
 
@@ -169,7 +170,7 @@ describe("ERC20", function () {
 
     const spender = ethers.constants.AddressZero;
 
-    await expect(contract.approve(address1.address, spender, value)).to.be.reverted;
+    await expect(contract.approve(address1.address, spender, value)).to.be.revertedWith("Cannot give approval to a zero address.");
 
   });
 
@@ -187,9 +188,40 @@ describe("ERC20", function () {
     await tx.wait();
 
     tx = await contract.allowance(address1.address, address2.address);
-    console.log(tx);
+
+    expect(tx).to.equal("100000000000000");
 
   });
+
+
+  it("Should test the first require statement in the allowance function, should revert the transaction.", async () => {
+    const deploy1 = await hre.ethers.getContractFactory("ERC20");
+    const contract = await deploy1.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const[address2] = await ethers.getSigners();
+
+    const value = utils.parseEther("0.0001");
+
+    const addressZero = ethers.constants.AddressZero;
+
+    await expect(contract.allowance(addressZero, address2.address)).to.be.revertedWith("Please enter a valid owner account.");
+
+  });
+
+  it("Should test the second require in the allowance function, should revert the transaction.", async () => {
+    const deploy1 = await hre.ethers.getContractFactory("ERC20");
+    const contract = await deploy1.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const [address1] = await ethers.getSigners();
+
+    const addressZero = ethers.constants.AddressZero;
+
+    await expect(contract.allowance(address1.address, addressZero)).to.be.revertedWith("Please enter a valid spender address.");
+
+  });
+
 
   it("Should increase the allowance of a user.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
@@ -203,9 +235,71 @@ describe("ERC20", function () {
 
     let tx = await contract.increaseAllowance(address1.address, address2.address, value);
     await tx.wait();
+
+    expect(tx).to.not.be.reverted;
   });
 
-  it("Should decrease the allowance of a user", async () => {
+
+  it("Should revert at the first require statement of increaseAllowance.", async () => {
+    const deploy1 = await hre.ethers.getContractFactory("ERC20");
+    const contract = await deploy1.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const [address1] = await ethers.getSigners();
+    const addressZero = ethers.constants.AddressZero;
+    const value = utils.parseEther("0.01");
+
+    await expect(contract.increaseAllowance(addressZero, address1.address, value)).to.be.revertedWith("Cannot withdraw funds from address(0).");
+
+  });
+
+  it("Should revert at the second require statement of increaseAllowance.", async () => {
+    const deploy1 = await hre.ethers.getContractFactory("ERC20");
+    const contract = await deploy1.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const [address1] = await ethers.getSigners();
+    const addressZero = ethers.constants.AddressZero;
+    const value = utils.parseEther("0.01");
+
+    await expect(contract.increaseAllowance(address1.address, addressZero, value)).to.be.revertedWith("Spender cannot be address(0).");
+
+  });
+
+
+  it("Should revert at the third require statement of increaseAllowance.", async () => {
+    const deploy1 = await hre.ethers.getContractFactory("ERC20");
+    const contract = await deploy1.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const [address1, address2] = await ethers.getSigners();
+    const value = utils.parseEther("0");
+
+    await expect(contract.increaseAllowance(address1.address, address2.address, value)).to.be.revertedWith("Cannot increase allowance to zero.");
+
+  });
+
+  it("Should revert at the fourth require statement of increaseAllowance.", async () => {
+    const deploy1 = await hre.ethers.getContractFactory("ERC20");
+    const contract = await deploy1.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const [address1, address2] = await ethers.getSigners();
+
+    const connectedContract = await contract.connect(address2);
+
+    const value = utils.parseEther("0.0001");
+
+    await expect(connectedContract.increaseAllowance(address1.address, address2.address, value)).to.be.revertedWith("Only the owner can increase the allowance.");
+
+  });
+
+
+
+
+
+
+  it("Should decrease the allowance of a user.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -215,32 +309,81 @@ describe("ERC20", function () {
     const value = utils.parseEther("0.000000001");
 
     let tx = await contract.decreaseAllowance(address1.address, address2.address, value);
-    await tx.wait();    
+    await tx.wait(); 
+    
+    expect(tx).to.not.be.reverted;
 
   });
 
- 
+
+  it("Should revert at the first require statement of decreaseAllowance.", async () => {
+    const deploy1 = await hre.ethers.getContractFactory("ERC20");
+    const contract = await deploy1.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const [address1] = await ethers.getSigners();
+    const addressZero = ethers.constants.AddressZero;
+    const value = utils.parseEther("0.01");
+
+    await expect(contract.decreaseAllowance(addressZero, address1.address, value)).to.be.revertedWith("Cannot withdraw funds from address(0).");
+
+  });
+
+  it("Should revert at the second require statement of decreaseAllowance.", async () => {
+    const deploy1 = await hre.ethers.getContractFactory("ERC20");
+    const contract = await deploy1.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const [address1] = await ethers.getSigners();
+    const addressZero = ethers.constants.AddressZero;
+    const value = utils.parseEther("0.01");
+
+    await expect(contract.decreaseAllowance(address1.address, addressZero, value)).to.be.revertedWith("Spender cannot be address(0).");
+
+  });
 
 
+  it("Should revert at the third require statement of decreaseAllowance.", async () => {
+    const deploy1 = await hre.ethers.getContractFactory("ERC20");
+    const contract = await deploy1.deploy("Nate Token", "NT");
+    await contract.deployed();
 
+    const [address1, address2] = await ethers.getSigners();
+    const value = utils.parseEther("0");
 
-  it("Current test", async () => { 
+    await expect(contract.decreaseAllowance(address1.address, address2.address, value)).to.be.revertedWith("Cannot decrease allowance to zero.");
+
+  });
+
+  it("Should revert at the fourth require statement of decreaseAllowance.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
 
     const [address1, address2] = await ethers.getSigners();
 
+    const connectedContract = await contract.connect(address2);
+
+    const value = utils.parseEther("0.0001");
+
+    await expect(connectedContract.decreaseAllowance(address1.address, address2.address, value)).to.be.revertedWith("Only the owner can decrease the allowance.");
+
+  });
 
 
-   
-  // let zeroAddress = ethers.constants.AddressZero;
+  it("Should successfully transfer tokens from one address to another.", async () => { 
+    const deploy1 = await hre.ethers.getContractFactory("ERC20");
+    const contract = await deploy1.deploy("Nate Token", "NT");
+    await contract.deployed();
 
-  // const value = utils.parseEther("1");
+    const [address1, address2] = await ethers.getSigners();
 
-  // let tx = await contract.decreaseAllowance(address1.address, address2.address, 0);
+    // Connect with the contract with a signer.
 
-  
+    // Called the mint function
+
+
+
 
     
  

@@ -57,8 +57,8 @@ contract ERC20 {
 
 
     function transfer(address _to, uint256 _amount) public  {
-        require(_to != address(0), "Cannot transfer to the zero address");
-        require(_amount > 0, "Cannot transfer zero tokens");
+        require(_to != address(0), "Cannot transfer to the zero address.");
+        require(_amount > 0, "Cannot transfer zero tokens.");
 
         balances[msg.sender] -= _amount;
         balances[_to] += _amount;
@@ -68,13 +68,13 @@ contract ERC20 {
 
     function allowance(address _owner, address _spender) public view returns (uint256) {
         require(_owner != address(0), "Please enter a valid owner account.");
-        require(_spender != address(0), "Please enter a valid spender address");
+        require(_spender != address(0), "Please enter a valid spender address.");
         return allowances[_owner][_spender];
     }
 
-    function approve(address _owner, address _spender, uint256 _amount) public payable {
-        require(_owner == msg.sender, "Cannot approve without the owner's confirmation");
-        require(_spender != address(0), "Cannot give approval to a zero address");
+    function approve(address _owner, address _spender, uint256 _amount) public {
+        require(_owner == msg.sender, "Cannot approve without the owner's confirmation.");
+        require(_spender != address(0), "Cannot give approval to a zero address.");
 
 
         allowances[_owner][_spender] = _amount;
@@ -85,7 +85,7 @@ contract ERC20 {
 
 
     function transferFrom(address _from, address _to, uint256 _amount) public returns (bool success) {
-        require(allowance(_from, msg.sender) > 0, "You do not an allowance approved");
+        require(allowance(_from, msg.sender) > 0, "You do not an allowance approved.");
         require(_from != address(0), "Cannot transfer from the zero address.");
         require(_to != address(0), "Cannot transfer to the zero address.");
         require(_amount >= balanceOf(_from), "The amount exceeds the balance of the sender's address.");
@@ -103,10 +103,10 @@ contract ERC20 {
 
 
     function increaseAllowance(address _owner, address _spender, uint256 _newValue) public returns (bool success) {
-        require(_owner != address(0), "Cannot withdraw funds from address(0)");
-        require(_spender != address(0), "Spender cannot be address(0)");
-        require(_newValue > 0, "Cannot increase allowance to zero");
-        require(_owner == msg.sender, "Only the owner can increase the allowance");
+        require(_owner != address(0), "Cannot withdraw funds from address(0).");
+        require(_spender != address(0), "Spender cannot be address(0).");
+        require(_newValue > 0, "Cannot increase allowance to zero.");
+        require(_owner == msg.sender, "Only the owner can increase the allowance.");
         
         allowances[_owner][_spender] = 0;
         allowances[_owner][_spender] = _newValue;
@@ -115,10 +115,10 @@ contract ERC20 {
     }
 
     function decreaseAllowance(address _owner, address _spender, uint256 _newValue) public returns (bool success) {
-        require(_owner != address(0), "Cannot withdraw funds from address(0)");
-        require(_spender != address(0), "Spender cannot be address(0)");
-        require(_newValue > 0, "Cannot decrease allowance to zero");
-        require(_owner == msg.sender, "Only the owner can decrease the allowance");
+        require(_owner != address(0), "Cannot withdraw funds from address(0).");
+        require(_spender != address(0), "Spender cannot be address(0).");
+        require(_newValue > 0, "Cannot decrease allowance to zero.");
+        require(_owner == msg.sender, "Only the owner can decrease the allowance.");
         
         allowances[_owner][_spender] = 0;
         allowances[_owner][_spender] = _newValue;
@@ -129,7 +129,7 @@ contract ERC20 {
 
     function mint(uint256 amount) public payable {
         require(tokenSupply > 0, "Not enough supply");
-        require(msg.value > tokenPrice, "Not enough ether sent");
+        require(msg.value > tokenPrice, "Not enough ether sent.");
         uint256 value = tokenPrice * amount;
         // require(msg.value > value, "Not enough Ether sent");
 
@@ -138,7 +138,7 @@ contract ERC20 {
         
 
 
-        require(mintAmount < tokenSupply, "Not enough Token Supply");
+        require(mintAmount < tokenSupply, "Not enough Token Supply.");
 
 
         uint256 newTokenSupply = tokenSupply - mintAmount;
@@ -150,13 +150,13 @@ contract ERC20 {
 
 
     modifier onlyOwner() {
-        require(msg.sender == _contractOwner, "Not the owner");
+        require(msg.sender == _contractOwner, "Not the owner.");
         _;
     }
 
     function etherTransfer(address _to) public onlyOwner {
         (bool sent,) = _to.call{value: address(this).balance}("");
-        require(sent, "Failed to send Ether");
+        require(sent, "Failed to send Ether.");
     } 
 
 
