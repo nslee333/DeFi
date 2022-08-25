@@ -12,11 +12,11 @@ contract ERC20 {
 
     uint256 public tokenDecimals = 18;
 
-    uint256 public tokenSupply = 1 * 10**18; // 1 Million. 25 decimal places 
+    uint256 public tokenSupply = 1000000 * 10**18; // 1 Million. 25 decimal places 
 
     uint256 public totalTokenSupply = 1000000 * 10**18; 
 
-    uint256 public tokenPrice = 1 wei;
+    uint256 public tokenPrice = 1000000000;
 
     mapping(address => uint256) public balances;
     
@@ -72,7 +72,7 @@ contract ERC20 {
         return allowances[_owner][_spender];
     }
 
-    function approve(address _owner, address _spender, uint256 _amount) public {
+    function approve(address _owner, address _spender, uint256 _amount) public payable {
         require(_owner == msg.sender, "Cannot approve without the owner's confirmation");
         require(_spender != address(0), "Cannot give approval to a zero address");
 
