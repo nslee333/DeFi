@@ -132,7 +132,7 @@ describe("ERC20", function () {
 
 
     let tx = await contract.approve(address1.address, address2.address, value);
-    await tx.wait();
+    await tx.wait(); // Add an expect assertion here?
 
     await expect(contract.approve(address1.address, address2.address, value))
     .to.emit(contract, "Approval")
