@@ -531,15 +531,27 @@ describe("ERC20", function () {
     const contract = await contractFactory.deploy("Nate Token", "NT");
     await contract.deployed();
 
-    
+    const [address1, address2] = await ethers.getSigners();
+
+    const value = utils.parseEther("0.00000001");
+
+    const approvalTx = await contract.approve(address1.address, address2.address, value);
+    await approvalTx.wait();
+
+    const connectedContract = await contract.connect(address2);
+
+    const addressZero = ethers.constants.AddressZero;
+
+    await expect(connectedContract.transferFrom(address1.address, addressZero, value)).to.be.revertedWith("Cannot transfer to the zero address.");
 
   });
 
   it("TransferFrom function: Should revert at the third require statement.", async () => {
+    const contractFactory = await hre.ethers.getContractFactory("ERC20");
+    const contract = await contractFactory.deployed("Nate Token", "NT");
+    await contractFactory.deployed();
 
-  });
-
-  it("TransferFrom function: Should revert at the fourth require statement.", async () => {
+    
 
   });
 

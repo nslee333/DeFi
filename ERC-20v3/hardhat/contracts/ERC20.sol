@@ -86,7 +86,6 @@ contract ERC20 {
 
     function transferFrom(address _from, address _to, uint256 _amount) public returns (bool success) {
         require(allowance(_from, msg.sender) > 0, "You do not have an allowance approved.");
-        require(_from != address(0), "Cannot transfer from the zero address.");
         require(_to != address(0), "Cannot transfer to the zero address.");
         require(_amount <= balanceOf(_from), "The amount exceeds the balance of the sender's address.");
 
