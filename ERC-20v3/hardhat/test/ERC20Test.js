@@ -447,19 +447,91 @@ describe("ERC20", function () {
     const contractFactory = await hre.ethers.getContractFactory("ERC20");
     const contract = await contractFactory.deploy("Nate Token", "NT");
     await contract.deployed();
-    
 
+    const [address1, address2] = await ethers.getSigners();
+
+    const value = "0.0001";
+
+    const mintTx = await contract.mint
+    (
+      1,
+      {
+        value: utils.parseEther(value),
+      }  
+    );
+    await mintTx.wait();
+
+    const approvalAmount = utils.parseEther("0.00000004");
+    const approvalTx = await contract.approve(address1.address, address2.address, approvalAmount);
+    await approvalTx.wait();
+
+    const connectedContract = await contract.connect(address2);
+
+    const transferAmount = utils.parseEther("0.00000001");
+    const transferAmountNeg = utils.parseEther("-0.00000001");
+    const transferAmountSafe = BigNumber.from(transferAmount);
+    const transferAmountSafeNeg = BigNumber.from(transferAmountNeg);
+
+    await expect(connectedContract.transferFrom(address1.address, address2.address, transferAmount))
+    .to.changeTokenBalances
+    (
+      connectedContract,
+      [address1, address2],
+      [transferAmountSafeNeg.toString(), transferAmountSafe.toString()]
+    );
+    
   });
   
   it("TransferFrom function: Should transfer tokens successfully and emit a Transfer event.", async () => {
+    const contractFactory = await hre.ethers.getContractFactory("ERC20");
+    const contract = await contractFactory.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const [address1, address2] = await ethers.getSigners();
+
+    const value = utils.parseEther("0.00000005");
+
+    const mintTx = await contract.mint
+    (
+      1, 
+      {
+        value: value,
+      }
+    );
+    await mintTx.wait();
+
+    const approvalAmount = utils.parseEther("0.00000005");
+
+    const approvalTx = await contract.approve(address1.address, address2.address, approvalAmount);
+    await approvalTx.wait()
+
+    const connectedContract = await contract.connect(address2);
+
+    const transferAmount = utils.parseEther("0.00000001");
+
+    await expect(connectedContract.transferFrom(address1.address, address2.address, transferAmount)).to.emit(connectedContract, "Transfer").withArgs(address1.address, address2.address, transferAmount);
 
   });
 
   it("TransferFrom function: Should revert at the first require statement.", async () => {
+    const contractFactory = await hre.ethers.getContractFactory("ERC20");
+    const contract = await contractFactory.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const [address1, address2] = await ethers.getSigners();
+
+    const value = utils.parseEther("0.00000001");
+
+    await expect(contract.transferFrom(address1.address, address2.address, value)).to.be.revertedWith("You do not have an allowance approved.");
 
   });
 
   it("TransferFrom function: Should revert at the second require statement.", async () => {
+    const contractFactory = await hre.ethers.getContractFactory("ERC20");
+    const contract = await contractFactory.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    
 
   });
 
