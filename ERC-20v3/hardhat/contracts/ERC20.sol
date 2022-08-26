@@ -16,7 +16,7 @@ contract ERC20 {
 
     uint256 public totalTokenSupply = 1000000 * 10**18; 
 
-    uint256 public tokenPrice = 1000000000;
+    uint256 public tokenPrice = 1 wei;
 
     mapping(address => uint256) public balances;
     

@@ -20,7 +20,6 @@ describe("ERC20", function () {
     await contract.deployed();
 
     let txn = await contract.name();
-    console.log(txn);
     expect(txn).to.equal("Nate Token");
 
   });
@@ -33,7 +32,6 @@ describe("ERC20", function () {
     await contract.deployed();
 
     let txn = await contract.symbol();
-    console.log(txn);
     expect(txn).to.equal("NT");
 
 
@@ -45,7 +43,6 @@ describe("ERC20", function () {
     await contract.deployed();
 
     let txn = await contract.decimals();
-    console.log(txn.toString());
     expect(txn).to.equal(18);
 
   });
@@ -57,7 +54,6 @@ describe("ERC20", function () {
     await contract.deployed();
 
     let txn = await contract.totalSupply();
-    console.log(txn.toString());
     expect(txn).to.equal(BigNumber.from("1000000000000000000000000"));
     
   });
@@ -377,14 +373,23 @@ describe("ERC20", function () {
     await contract.deployed();
 
     const [address1, address2] = await ethers.getSigners();
-
-    // Connect with the contract with a signer.
-
-    // Called the mint function
-
+    const connectedContract = await contract.connect(address1);
+    const amount = "0.0001";
+    const value = utils.parseEther("0.0001");
 
 
+    const tx = await connectedContract.mint(
+      1, 
+      {
+        value: utils.parseEther(amount),
+      }
+    );
+    await tx.wait();
 
+
+    // Transfer an amount of tokens from address1. to address2.
+
+    
     
  
   });
