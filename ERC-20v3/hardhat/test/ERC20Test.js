@@ -5,7 +5,7 @@ const {
 const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 const { expect } = require("chai");
 const hre = require("hardhat");
-const { utils, FixedNumber, BigNumber, formatEther, parseUnits, constants } = require("ethers");
+const { utils, FixedNumber, BigNumber, formatEther, parseUnits, constants, toNumber } = require("ethers");
 const { supportWithArgs } = require("@nomicfoundation/hardhat-chai-matchers/internal/withArgs");
 
 
@@ -14,7 +14,7 @@ describe("ERC20", function () {
   
 
 
-    it("Should log the name of the token from the contract.", async () => {
+    it("Name function: Should log the name of the token contract.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -26,7 +26,7 @@ describe("ERC20", function () {
 
 
 
-  it("Should log the symbol of the token contract.", async () => {
+  it("Symbol function: Should log the symbol of the token contract.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -37,7 +37,7 @@ describe("ERC20", function () {
 
   });
 
-  it("Should log the decimal number of the token contract.", async () => {
+  it("Decimals function: Should log the decimal amount of the token contract.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -48,7 +48,7 @@ describe("ERC20", function () {
   });
 
 
-  it("Should log the total supply of the token contract.", async () => {
+  it("TotalSupply Function: Should log the total supply of the token contract.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -60,7 +60,7 @@ describe("ERC20", function () {
 
 
 
-  it("Should mint an amount of tokens." , async () => {
+  it("Mint function: Should mint an amount of tokens." , async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -79,7 +79,7 @@ describe("ERC20", function () {
 
   });
 
-  it("Should test the second require statement of the mint function, should revert the transaction.", async () => {
+  it("Mint function: Should revert at the second require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -96,7 +96,7 @@ describe("ERC20", function () {
   });
 
 
-  it("Should call the approve function.", async () => {
+  it("Approve function: Should successfully call the approve function.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -118,7 +118,7 @@ describe("ERC20", function () {
 
   });
 
-  it("Should call the approve function and emit an approval event.", async () => {
+  it("Approve function: Should emit an Approval event after a successful approve call.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -140,7 +140,7 @@ describe("ERC20", function () {
   });
 
   
-  it("Calls the approve function with a signer that is not the owner of the funds, should revert transaction.", async () => {
+  it("Approve function: Should revert at the first require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -155,7 +155,7 @@ describe("ERC20", function () {
 
   });
 
-  it("Calls the approve function, with the spender address equal to the zero address, should revert transaction.", async () => {
+  it("Approve function: Should revert at the second require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -170,7 +170,7 @@ describe("ERC20", function () {
 
   });
 
-  it("Should call the allowance function, which returns the approval amount (owner, spender).", async () => { // Is it possible to eliminate the approve call?
+  it("Allowance function: Should successfully return the approved allowance.", async () => { // Is it possible to eliminate the approve call?
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -190,7 +190,7 @@ describe("ERC20", function () {
   });
 
 
-  it("Should test the first require statement in the allowance function, should revert the transaction.", async () => {
+  it("Allowance function: Should revert at the first require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -205,7 +205,7 @@ describe("ERC20", function () {
 
   });
 
-  it("Should test the second require in the allowance function, should revert the transaction.", async () => {
+  it("Allowance function: Should revert at the second require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -219,7 +219,7 @@ describe("ERC20", function () {
   });
 
 
-  it("Should increase the allowance of a user.", async () => {
+  it("IncreaseAllowance function: Should successfully increase the allowance.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -236,7 +236,7 @@ describe("ERC20", function () {
   });
 
 
-  it("Should revert at the first require statement of increaseAllowance.", async () => {
+  it("IncreaseAllowance function: Should revert at the first require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -249,7 +249,7 @@ describe("ERC20", function () {
 
   });
 
-  it("Should revert at the second require statement of increaseAllowance.", async () => {
+  it("IncreaseAllowance function: Should revert at the second require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -263,7 +263,7 @@ describe("ERC20", function () {
   });
 
 
-  it("Should revert at the third require statement of increaseAllowance.", async () => {
+  it("IncreaseAllowance function: Should revert at the third require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -275,7 +275,7 @@ describe("ERC20", function () {
 
   });
 
-  it("Should revert at the fourth require statement of increaseAllowance.", async () => {
+  it("IncreaseAllowance function: Should revert at the fourth require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -291,11 +291,7 @@ describe("ERC20", function () {
   });
 
 
-
-
-
-
-  it("Should decrease the allowance of a user.", async () => {
+  it("DecreaseAllowance function: Should successfully decrease the allowance.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -312,7 +308,7 @@ describe("ERC20", function () {
   });
 
 
-  it("Should revert at the first require statement of decreaseAllowance.", async () => {
+  it("DecreaseAllowance function: Should revert at the first require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -325,7 +321,7 @@ describe("ERC20", function () {
 
   });
 
-  it("Should revert at the second require statement of decreaseAllowance.", async () => {
+  it("DecreaseAllowance function: Should revert at the second require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -339,7 +335,7 @@ describe("ERC20", function () {
   });
 
 
-  it("Should revert at the third require statement of decreaseAllowance.", async () => {
+  it("DecreaseAllowance function: Should revert at the third require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -351,7 +347,7 @@ describe("ERC20", function () {
 
   });
 
-  it("Should revert at the fourth require statement of decreaseAllowance.", async () => {
+  it("DecreaseAllowance function: Should revert at the fourth require statement..", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -367,32 +363,77 @@ describe("ERC20", function () {
   });
 
 
-  it("Should successfully transfer tokens from one address to another.", async () => { 
+  it("Transfer function: should successfully transfer tokens.", async () => { 
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
 
     const [address1, address2] = await ethers.getSigners();
     const connectedContract = await contract.connect(address1);
-    const amount = "0.0001";
-    const value = utils.parseEther("0.0001");
-
+    const tokenPrice = 0.001;
+    const amount = "1";
+    const value = amount * tokenPrice;
 
     const tx = await connectedContract.mint(
       1, 
       {
-        value: utils.parseEther(amount),
+        value: utils.parseEther(value.toString()),
       }
     );
     await tx.wait();
 
+    const value1 = utils.parseEther("1");
+    const value2 = utils.parseEther("-1");
+    const BN = BigNumber.from(value1);
+    const BNeg = BigNumber.from(value2);
 
-    // Transfer an amount of tokens from address1. to address2.
-
-    
-    
- 
+    await expect(connectedContract.transfer(address2.address, value1)).to.changeTokenBalances(
+      connectedContract,
+      [address1, address2],
+      [BNeg, BN]
+    );
   });
+
+  it("Transfer function: Should emit a Transfer event upon transfer.", async () => {
+    const deploy1 = await hre.ethers.getContractFactory("ERC20");
+    const contract = await deploy1.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const [address1, address2] = await ethers.getSigners();
+
+    const connectedContract = await contract.connect(address1);
+
+    const value = 0.0001;
+
+    const mintTX = await connectedContract.mint(
+      1,
+      {
+        value: utils.parseEther(value.toString()),
+      }
+    );
+
+    const amount = utils.parseEther("0.000001")
+
+    await expect(connectedContract.transfer(address2.address, amount)).to.emit(connectedContract, "Transfer").withArgs(
+      address1.address,
+      address2.address,
+      amount
+    );
+        
+  });
+
+  it("Transfer function: Should revert at the first require statement.", async () => {
+
+  });
+
+  it("Transfer function: Should revert at the second require statement.", async () => {
+
+  });
+
+
+
+
+
 
 
 
