@@ -347,7 +347,7 @@ describe("ERC20", function () {
 
   });
 
-  it("DecreaseAllowance function: Should revert at the fourth require statement..", async () => {
+  it("DecreaseAllowance function: Should revert at the fourth require statement.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
     await contract.deployed();
@@ -369,12 +369,11 @@ describe("ERC20", function () {
     await contract.deployed();
 
     const [address1, address2] = await ethers.getSigners();
-    const connectedContract = await contract.connect(address1);
     const tokenPrice = 0.001;
     const amount = "1";
     const value = amount * tokenPrice;
 
-    const tx = await connectedContract.mint(
+    const tx = await contract.mint(
       1, 
       {
         value: utils.parseEther(value.toString()),
@@ -387,8 +386,8 @@ describe("ERC20", function () {
     const BN = BigNumber.from(value1);
     const BNeg = BigNumber.from(value2);
 
-    await expect(connectedContract.transfer(address2.address, value1)).to.changeTokenBalances(
-      connectedContract,
+    await expect(contract.transfer(address2.address, value1)).to.changeTokenBalances(
+      contract,
       [address1, address2],
       [BNeg, BN]
     );
@@ -400,21 +399,19 @@ describe("ERC20", function () {
     await contract.deployed();
 
     const [address1, address2] = await ethers.getSigners();
-
-    const connectedContract = await contract.connect(address1);
-
     const value = 0.0001;
 
-    const mintTX = await connectedContract.mint(
+    const mintTX = await contract.mint(
       1,
       {
         value: utils.parseEther(value.toString()),
       }
     );
+    await mintTX.wait();
 
     const amount = utils.parseEther("0.000001")
 
-    await expect(connectedContract.transfer(address2.address, amount)).to.emit(connectedContract, "Transfer").withArgs(
+    await expect(contract.transfer(address2.address, amount)).to.emit(contract, "Transfer").withArgs(
       address1.address,
       address2.address,
       amount
@@ -423,14 +420,68 @@ describe("ERC20", function () {
   });
 
   it("Transfer function: Should revert at the first require statement.", async () => {
+    const contractFactory = await hre.ethers.getContractFactory("ERC20");
+    const contract = await contractFactory.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const value = utils.parseEther("0.0001");
+    const addressZero = ethers.constants.AddressZero;
+
+    await expect(contract.transfer(addressZero, value)).to.be.revertedWith("Cannot transfer to the zero address.");
 
   });
 
   it("Transfer function: Should revert at the second require statement.", async () => {
+    const contractFactory = await hre.ethers.getContractFactory("ERC20");
+    const contract = await contractFactory.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const value = utils.parseEther("0");
+    const [address1, address2] = await ethers.getSigners();
+  
+    await expect(contract.transfer(address2.address, value)).to.be.revertedWith("Cannot transfer zero tokens.");
 
   });
 
+  it("TransferFrom function: Should transfer tokens from an account successfully.", async () => {
+    const contractFactory = await hre.ethers.getContractFactory("ERC20");
+    const contract = await contractFactory.deploy("Nate Token", "NT");
+    await contract.deployed();
+    
 
+  });
+  
+  it("TransferFrom function: Should transfer tokens successfully and emit a Transfer event.", async () => {
+
+  });
+
+  it("TransferFrom function: Should revert at the first require statement.", async () => {
+
+  });
+
+  it("TransferFrom function: Should revert at the second require statement.", async () => {
+
+  });
+
+  it("TransferFrom function: Should revert at the third require statement.", async () => {
+
+  });
+
+  it("TransferFrom function: Should revert at the fourth require statement.", async () => {
+
+  });
+
+  it("EtherTransfer function: Should successfully transfer funds to the owner account.", async () => {
+
+  });
+  
+  it("EtherTransfer function: Should revert because msg.sender is not the owner of the contract", async () => {
+
+  });
+
+  it("EtherTransfer function: Should revert because the ether failed to send.", async () => {
+
+  });
 
 
 
