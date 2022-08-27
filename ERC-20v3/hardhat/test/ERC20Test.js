@@ -548,23 +548,65 @@ describe("ERC20", function () {
 
   it("TransferFrom function: Should revert at the third require statement.", async () => {
     const contractFactory = await hre.ethers.getContractFactory("ERC20");
-    const contract = await contractFactory.deployed("Nate Token", "NT");
-    await contractFactory.deployed();
+    const contract = await contractFactory.deploy("Nate Token", "NT");
+    await contract.deployed();
 
+    const [address1, address2] = await ethers.getSigners();
+
+    const connectedContract = await contract.connect(address2);
     
+    const value = utils.parseEther("0.00001");
 
+    const approveTx = await contract.approve(address1.address, address2.address, value);
+    await approveTx.wait();
+
+    await expect(connectedContract.transferFrom(address1.address, address2.address, value)).to.be.revertedWith("The amount exceeds the balance of the sender's address.");
   });
 
   it("EtherTransfer function: Should successfully transfer funds to the owner account.", async () => {
+      const contractFactory = await hre.ethers.getContractFactory("ERC20");
+      const contract = await contractFactory.deploy("Nate Token", "NT");
+      await contract.deployed();
 
+      const [address1, address2] = await ethers.getSigners();
+
+      const connectedContract = await contract.connect(address2);
+      const value = 0.001 * 0.001;
+      const mintTx = await connectedContract.mint
+      (
+        1,
+        {
+          value: utils.parseEther(value.toString()),
+        }
+      );
+      await mintTx.wait();
+
+      const checkValue = BigNumber.from("-1000000000000");
+
+      await expect(contract.etherTransfer(address1.address)).to.changeEtherBalance(contract, checkValue);
   });
   
   it("EtherTransfer function: Should revert because msg.sender is not the owner of the contract", async () => {
+    const contractFactory = await hre.ethers.getContractFactory("ERC20");
+    const contract = await contractFactory.deploy("Nate Token", "NT");
+    await contract.deployed();
+
+    const [address2] = await ethers.getSigners();
+
+    const connectedContract = await contract.connect(address2);
+
+    await expect(connectedContract.etherTransfer(address2.address)).to.be.revertedWith("Not the owner.");
 
   });
 
   it("EtherTransfer function: Should revert because the ether failed to send.", async () => {
+    const contractFactory = await hre.ethers.getContractFactory("ERC20");
+    const contract = await contractFactory.deploy("Nate Token", "NT");
+    await contract.deployed();
 
+    const addressZero = ethers.constants.AddressZero;
+
+    await expect(contract.etherTransfer(addressZero)).to.be.revertedWith("Failed to send Ether.");
   });
 
 
