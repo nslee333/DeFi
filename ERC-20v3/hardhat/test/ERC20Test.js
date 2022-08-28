@@ -11,9 +11,6 @@ const { supportWithArgs } = require("@nomicfoundation/hardhat-chai-matchers/inte
 
 
 describe("ERC20", function () {
-  
-
-
     it("Name function: Should log the name of the token contract.", async () => {
     const deploy1 = await hre.ethers.getContractFactory("ERC20");
     const contract = await deploy1.deploy("Nate Token", "NT");
@@ -591,7 +588,7 @@ describe("ERC20", function () {
     const contract = await contractFactory.deploy("Nate Token", "NT");
     await contract.deployed();
 
-    const [address2] = await ethers.getSigners();
+    const [address1, address2] = await ethers.getSigners();
 
     const connectedContract = await contract.connect(address2);
 
@@ -604,9 +601,13 @@ describe("ERC20", function () {
     const contract = await contractFactory.deploy("Nate Token", "NT");
     await contract.deployed();
 
+    const contractFactory2 = await hre.ethers.getContractFactory("Testing");
+    const contractTest = await contractFactory2.deploy();
+    await contractTest.deployed();
+
     const addressZero = ethers.constants.AddressZero;
 
-    await expect(contract.etherTransfer(addressZero)).to.be.revertedWith("Failed to send Ether.");
+    await expect(contract.etherTransfer(contractTest.address)).to.be.revertedWith("Failed to send Ether.");
   });
 
 
