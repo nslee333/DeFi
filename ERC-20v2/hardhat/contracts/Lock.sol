@@ -4,31 +4,55 @@ pragma solidity ^0.8.9;
 // Import this file to use console.log
 import "hardhat/console.sol";
 
-contract Lock {
-    uint public unlockTime;
-    address payable public owner;
+contract ERC20 {
 
-    event Withdrawal(uint amount, uint when);
+    // State variables and mappings.
 
-    constructor(uint _unlockTime) payable {
-        require(
-            block.timestamp < _unlockTime,
-            "Unlock time should be in the future"
-        );
+    
+    // FUNCTIONS:
 
-        unlockTime = _unlockTime;
-        owner = payable(msg.sender);
-    }
+    // Constructor (name symbol)
 
-    function withdraw() public {
-        // Uncomment this line to print a log in your terminal
-        // console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
+    // Name()
 
-        require(block.timestamp >= unlockTime, "You can't withdraw yet");
-        require(msg.sender == owner, "You aren't the owner");
+    // Symbol()
 
-        emit Withdrawal(address(this).balance, block.timestamp);
+    // Decimals()
 
-        owner.transfer(address(this).balance);
-    }
+    // totalSupply()
+
+    // balanceOf(account)
+
+    // Transfer (to, amount)
+
+    // allowance(owner, spender)
+
+    // approve(spender, amount)
+
+    // TransferFrom(from, to, amount).
+
+    // increaseAllowance(spender, added value)
+
+    // decreaseAllowance(spender, subtractedValue)
+
+    // _transfer(from, to, amount)
+
+    // _mint(account, amount)
+
+    // _burn(account, amount)
+
+    // _approve(owner, spender, amount)
+
+    // _spendALlowance(owner, spender, amount)
+
+    // _beforeTokenTransfer(from, to, amount)
+
+    // _afterTokenTransfer(from, to, amount)
+
+    // EVENTS: 
+
+    // Transfer(from, to, value)
+
+    // Approval(owner, spender, value)
+
 }
