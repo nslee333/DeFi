@@ -19,7 +19,7 @@ describe("ERC-20", function () {
 
     // balanceOf(account)
 
-    // Transfer (to, amount)
+    // Transfer(to, amount)
 
     // allowance(owner, spender)
 
