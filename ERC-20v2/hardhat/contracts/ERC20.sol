@@ -6,8 +6,6 @@ import "hardhat/console.sol";
 
 contract ERC20 {
 
-    // State variables and mappings.
-
     string public name;
 
     string public symbol;
@@ -20,13 +18,11 @@ contract ERC20 {
 
     uint256 private _maxTokenSupply = 1000000 * 10**18;
 
+    uint256 private _burnedTokens;
+
     mapping(address => uint256) private _balances;
     
     mapping(address => mapping(address => uint256)) private _allowances;
-
-    
-
-
 
     constructor(string memory _name, string memory _symbol) {
         name = _name;
@@ -47,6 +43,10 @@ contract ERC20 {
 
     function tokenSupply() public view returns (uint256) {
         return _currentTokenSupply;
+    }
+
+    function burnedTokens() public view returns (uint256) {
+        return _burnedTokens;
     }
 
     function balanceOf(address _owner) public view returns (uint256) {
@@ -136,17 +136,35 @@ contract ERC20 {
         uint256 possibleSupply = possibleTotal += _currentTokenSupply;
         require(possibleSupply <= _maxTokenSupply, "Maximum supply circulation reached.");
 
-        
+        address account = _msgSender();
 
+        _mint(account, amount);
+    }
 
-
-
+    function _mint(address account, uint256 amount) private {
+        _balances[account] += amount;
+        _currentTokenSupply += amount;
         
     }
 
-    // _mint(account, amount)
+    function burn(uint256 amount) public {
+        require(amount > 0, "Cannot burn zero tokens");
 
-    // _burn(account, amount)
+        address account = _msgSender();
+        _burn(account, amount);
+    }
+
+
+    function _burn(address account, uint256 amount) public {
+        _balances[account] -= amount;
+        _balances[address(0)] += amount;
+        _burnedTokens += amount;
+
+
+
+        emit Burn(account, amount);
+
+    }
 
     function _approve(address _owner, address _spender, uint256 _amount) private {
         require(_spender != address(0), "Cannot give approval to address 0.");
@@ -173,5 +191,7 @@ contract ERC20 {
     event Transfer(address from, address to, uint256 value);
 
     event Approval(address from, address to, uint256 value);
+
+    event Burn(address account, uint256 value);
 
 }
