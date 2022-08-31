@@ -16,11 +16,11 @@ describe("ERC-20v2", async () => {
 
     
 
-    // it("Name(): Should return the name of the token contract.", async () => {
-    //     const {contract} = await loadFixture(fixture);
-    //     const tx = await contract.getName();
-    //     expect(tx).to.equal("Solari");
-    // });
+    it("Name(): Should return the name of the token contract.", async () => {
+        const {contract} = await loadFixture(fixture);
+        const tx = await contract.getName();
+        expect(tx).to.equal("Solari");
+    });
 
     it("Symbol(): Should return the symbol of the token contract.", async () => {
         const {contract} = await loadFixture(fixture);
@@ -32,7 +32,7 @@ describe("ERC-20v2", async () => {
     it("decimals(): Should return the decimals of the token contract.", async () => {
         const {contract} = await loadFixture(fixture);
 
-        const tx = await contract.decimals();
+        const tx = await contract.getDecimals();
         expect(tx).to.equal(18);
     });
 
@@ -46,16 +46,69 @@ describe("ERC-20v2", async () => {
     it("maxTokenSupply(): Should return the maxTokenSupply of the token contract.", async () => {
         const {contract} = await loadFixture(fixture);
         const tx = await contract.maxTokenSupply();
+
         const expectedValue = 1000000 * (10 ** 18);
-        console.log(expectedValue.toLocaleString());
-        expect(tx.toString()).to.equal(expectedValue.toString());
-        
+
+        expect(tx.toString()).to.equal(expectedValue.toLocaleString("en-US", {useGrouping: false}));
     }); 
 
-    // balanceOf(account)
+    it("balanceOf(): Should return the balance of the account.", async () => {
+        const {contract} = await loadFixture(fixture);
 
-    // Transfer(to, amount)
+        const value = 5 * 0.0001;
+        const mintTx = await contract.mint
+        (
+            5, 
+            {
+                value: utils.parseEther(value.toString()),
+            }
+        );
+        await mintTx.wait();
 
+        const [signer] = await ethers.getSigners();
+
+        const tx = await contract.balanceOf(signer.address);
+        expect(tx).to.equal(5);
+    });
+
+    
+
+   it("Transfer(): Should transfer an amount from one account to another.", async () => {
+    const {contract} = await loadFixture(fixture);
+
+    const [address1, address2] = await ethers.getSigners();
+    const value = 5 * 0.0001;
+
+    const connectedContract = contract.connect(address1);
+
+    const msg = await contract.msgSender();
+
+
+    const mintTx = await connectedContract.mint
+    (
+        5,
+        {
+            value: utils.parseEther(value.toString()),
+        }
+    );
+    await mintTx.wait();
+
+    const tx = await contract.balanceOf(address1.address);
+    console.log(tx);
+
+    const amount = utils.parseEther("0.00001");
+    console.log(tx, utils.parseEther("0.0001"), utils.parseEther(value.toString()));
+
+    await expect(connectedContract.transfer(address2.address, amount)).to.changeTokenBalances(
+        connectedContract,
+        [address1, address2],
+        [-amount, amount]
+    ); 
+    
+
+   });
+
+   
     // allowance(owner, spender)
 
     // approve(spender, amount)

@@ -6,13 +6,13 @@ import "hardhat/console.sol";
 
 contract ERC20 {
 
-    string public name;
+    string private name;
 
-    string public symbol;
+    string private symbol;
 
-    uint8 public decimals = 18;
+    uint8 private decimals = 18;
 
-    uint256 public tokenPrice = 0.0001 ether;
+    uint256 private tokenPrice = 0.0001 ether;
 
     uint256 private _currentTokenSupply;
 
@@ -195,6 +195,10 @@ contract ERC20 {
 
     function _msgSender() private view returns (address) {
         return msg.sender;
+    }
+
+    function msgSender() public view returns (address) {
+        return _msgSender();
     }
 
     event Transfer(address from, address to, uint256 value);
