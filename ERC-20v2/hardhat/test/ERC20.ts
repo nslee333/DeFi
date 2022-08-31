@@ -145,7 +145,31 @@ describe("ERC-20v2", async () => {
         await expect(contract.transfer(address2.address, amount)).to.be.revertedWith("You don't have enough to transfer.");
     });
 
-    
+    it("Transfer(): Should revert at the third require statement.", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const [address1] = await ethers.getSigners();
+
+        const connContract = contract.connect(address1);
+
+        const value = 2 * 0.0001;
+
+        const tx = await connContract.mint
+        (
+            2, 
+            {
+                value: utils.parseEther(value.toString()),
+            }
+        );
+
+        await tx.wait();
+
+        const address0 = ethers.constants.AddressZero;
+
+        const amount = 1;
+
+        await expect(connContract.transfer(address0, amount)).to.be.revertedWith("Cannot transfer to address 0.");
+    });
 
     it("Allowance(): Should display the allowance.", async () => {
         const {contract} = await loadFixture(fixture);
@@ -200,11 +224,135 @@ describe("ERC-20v2", async () => {
         expect(await contract.approve(address2.address, amount)).to.emit(contract, "Approval").withArgs(address1.address, address2.address, amount);
     });
 
-    it("TransferFrom(): It should transfer from one account to another", async () => {
+    it("Approve(): Should revert at the first require statement.", async () => {
+        const {contract} = await loadFixture(fixture);
 
+        const [address1, address2] = await ethers.getSigners();
+
+        const amount = 0;
+
+        await expect(contract.approve(address2.address, amount)).to.be.revertedWith("Allowance amount too small.");
+    })
+
+    it("TransferFrom(): It should transfer from one account to another", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const [address1, address2] = await ethers.getSigners();
+
+        const addr1Contract = contract.connect(address1);
+
+        const amount = 5 * 0.0001;
+
+        const mintTx = await addr1Contract.mint
+        (
+            5,
+            {
+                value: utils.parseEther(amount.toString()),
+            }
+        );
+        await mintTx.wait();
+
+        const allowanceAmnt = 3; 
+
+        const approvalTx = await addr1Contract.approve(address2.address, allowanceAmnt);
+        await approvalTx.wait();
+
+        const addr2Contract = contract.connect(address2);
+
+        await expect(addr2Contract.transferFrom(address1.address, address2.address, allowanceAmnt)).to.changeTokenBalances(
+            addr2Contract,
+            [address1.address, address2.address],
+            [-allowanceAmnt, allowanceAmnt],
+            );
+        
+    });
+
+    it("TransferFrom(): Should transfer tokens then emit a Transfer event", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const [address1, address2] = await ethers.getSigners();
+
+        const addr1Contract = contract.connect(address1);
+
+        const amount = 5 * 0.0001;
+        const mintTx = await addr1Contract.mint
+        (
+            5,
+            {
+                value: utils.parseEther(amount.toString()),
+            }
+        );
+        await mintTx.wait();
+
+        const approvalAmnt = 2;
+        const approvalTx = await addr1Contract.approve(address2.address, approvalAmnt);
+        await approvalTx.wait();
+
+        const addr2Contract = contract.connect(address2);
+
+        await expect(addr2Contract.transferFrom(address1.address, address2.address, approvalAmnt)).to.emit(addr2Contract, "Transfer").withArgs(
+            address1.address, 
+            address2.address,
+            approvalAmnt
+            );
+    });
+
+    it("TransferFrom(): Should revert at the first require statement.", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const [address1] = await ethers.getSigners();
+
+        const address0 = ethers.constants.AddressZero;
+
+        const amount = 2;
+
+        await expect(contract.transferFrom(address0, address1.address, amount)).to.be.revertedWith("Cannot transfer from address(0).");
+    });
+
+    it("TransferFrom(): Should revert at the second require statement.", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const [address1, address2] = await ethers.getSigners();
+
+        const address0 = ethers.constants.AddressZero;
+
+        const amount = 2;
+
+        await expect(contract.transferFrom(address1.address, address0, amount)).to.be.revertedWith("Cannot transfer to address(0).");
+    });
+
+    it("TransferFrom(): Should revert at the third require statement.", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const [address1, address2] = await ethers.getSigners();
+
+        const amount = 0;
+
+        await expect(contract.transferFrom(address1.address, address2.address, amount)).to.be.revertedWith("Transfer amount too small.");
+    });
+
+    it("TransferFrom(): Should revert at the fourth require statement.", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const [address1, address2] = await ethers.getSigners();
+        
+        const amount = 5;
+
+        await expect(contract.transferFrom(address1.address, address2.address, amount)).to.be.revertedWith("Need an approval from the owner to transfer funds.");
     });
 
     // increaseAllowance(spender, added value)
+    it("IncreaseAllowance(): Should increase the allowance.", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const [address1, address2] = await ethers.getSigners();
+
+        const amount = 5;
+        
+        const tx = await contract.increaseAllowance(address2.address, amount);
+
+        
+    });
 
     // decreaseAllowance(spender, subtractedValue)
 

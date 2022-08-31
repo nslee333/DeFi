@@ -90,10 +90,10 @@ contract ERC20 {
     }
 
     function transferFrom(address _from, address _to, uint256 _amount) public {
-        require(_from != address(0), "Cannot transfer from address 0.");
-        require(_to != address(0), "Cannot transfer to address 0.");
+        require(_from != address(0), "Cannot transfer from address(0).");
+        require(_to != address(0), "Cannot transfer to address(0).");
         require(_amount != 0, "Transfer amount too small.");
-        require(_allowances[_from][_to] >= _amount, "Need an approval from the owner to transfer funds");
+        require(_allowances[_from][_to] >= _amount, "Need an approval from the owner to transfer funds.");
     
         _balances[_from] -= _amount;
         _balances[_to] += _amount;
@@ -101,7 +101,6 @@ contract ERC20 {
         _spendAllowance(_from, _to, _amount);
 
         emit Transfer(_from, _to, _amount);
-
     }
 
     function increaseAllowance(address spender, uint256 amount) public {
