@@ -14,9 +14,17 @@ contract ERC20 {
 
     uint8 public decimals = 18;
 
-    uint256 public _tokenSupply = 1000000 * 10**18;
+    uint256 public tokenPrice = 0.0001 ether;
 
-    mapping(address => uint256) private balances;
+    uint256 private _currentTokenSupply;
+
+    uint256 private _maxTokenSupply = 1000000 * 10**18;
+
+    mapping(address => uint256) private _balances;
+    
+    mapping(address => mapping(address => uint256)) private _allowances;
+
+    
 
 
 
@@ -38,17 +46,17 @@ contract ERC20 {
     }
 
     function tokenSupply() public view returns (uint256) {
-        return _tokenSupply;
+        return _currentTokenSupply;
     }
 
     function balanceOf(address _owner) public view returns (uint256) {
         require(_owner != address(0), "Address 0.");
-        return balances[_owner];
+        return _balances[_owner];
     }
 
     function transfer(address _to, uint256 _amount) public {
         require(_amount > 0, "Tranfer amount too small.");
-        require(balances[_msgSender()] > _amount, "You don't have enough to transfer.");
+        require(_balances[_msgSender()] > _amount, "You don't have enough to transfer.");
         require(_to != address(0), "Cannot transfer to address 0.");
 
         address owner = _msgSender();
@@ -56,12 +64,13 @@ contract ERC20 {
         _transfer(owner, _to, _amount);
     }
 
-    // allowance(owner, spender)
+    function allowances(address _owner, address _spender) public view returns (uint256) {
+        require(_owner != address(0), "Cannot check address(0)");
+        return _allowances[_owner][_spender];
+    }
 
-    
 
     function approve(address spender, uint256 amount) public {
-        require(spender != address(0), "Cannot give approval to address 0.");
         require(amount > 0, "Allowance amount too small.");
         
         address owner = _msgSender();
@@ -69,22 +78,49 @@ contract ERC20 {
         _approve(owner, spender, amount);
 
         emit Approval(owner, spender, amount);
+    }
+
+    function transferFrom(address _from, address _to, uint256 _amount) public {
+        require(_from != address(0), "Cannot transfer from address 0.");
+        require(_to != address(0), "Cannot transfer to address 0.");
+        require(_amount != 0, "Transfer amount too small.");
+        require(_allowances[_from][_to] >= _amount, "Need an approval from the owner to transfer funds");
+    
+        _balances[_from] -= _amount;
+        _balances[_to] += _amount;
+
+        _spendAllowance(_from, _to, _amount);
+
+        emit Transfer(_from, _to, _amount);
 
     }
 
-    // TransferFrom(from, to, amount).
+    function increaseAllowance(address spender, uint256 amount) public {
+        require(amount != 0, "Allowance amount too small.");
 
-    // increaseAllowance(spender, added value)
+        address _owner = _msgSender();
 
-    // decreaseAllowance(spender, subtractedValue)
+        _allowances[_owner][spender] = 0;
+        _approve(_owner, spender, amount);        
+    }
+
+    function decreaseAllowance(address spender, uint256 amount) public {
+        address _owner = _msgSender();
+        if (amount == 0) {
+            _allowances[_owner][spender] = 0;
+        } else {
+            _allowances[_owner][spender] = 0;
+            _approve(_owner, spender, amount);
+        }
+    }
 
     function _transfer(address _from, address _to, uint256 _amount) private {
         require(_to != address(0), "Cannot transfer to address 0.");
 
         _beforeTokenTransfer(_from, _to, _amount);
 
-        balances[_from] -= _amount;
-        balances[_to] += _amount;
+        _balances[_from] -= _amount;
+        _balances[_to] += _amount;
 
         emit Transfer(_from, _to, _amount);
 
@@ -92,18 +128,38 @@ contract ERC20 {
 
     }
 
+    function mint(uint256 amount) public payable {
+        require(amount > 0, "Cannot mint zero tokens.");
+        uint256 requiredAmount = tokenPrice * amount;
+        require(requiredAmount >= msg.value, "Not enough Ether sent to complete minting.");
+        uint256 possibleTotal = amount * 10**18;
+        uint256 possibleSupply = possibleTotal += _currentTokenSupply;
+        require(possibleSupply <= _maxTokenSupply, "Maximum supply circulation reached.");
+
+        
+
+
+
+
+        
+    }
+
     // _mint(account, amount)
 
     // _burn(account, amount)
 
     function _approve(address _owner, address _spender, uint256 _amount) private {
-        
+        require(_spender != address(0), "Cannot give approval to address 0.");
 
+        _allowances[_owner][_spender] = _amount;
+
+        emit Approval(_owner, _spender, _amount);             
 
     }
-    // _approve(owner, spender, amount)
 
-    // _spendALlowance(owner, spender, amount)
+    function _spendAllowance(address _owner, address _spender, uint256 _amount) private {
+        _allowances[_owner][_spender] -= _amount;
+    }
 
   
     function _beforeTokenTransfer(address _from, address _to, uint256 _amount) private {}
@@ -113,10 +169,6 @@ contract ERC20 {
     function _msgSender() private view returns (address) {
         return msg.sender;
     }
-
-    // EVENTS: 
-
-    // Transfer(from, to, value)
 
     event Transfer(address from, address to, uint256 value);
 
