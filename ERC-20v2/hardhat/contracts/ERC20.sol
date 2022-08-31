@@ -41,7 +41,16 @@ contract ERC20 {
         return decimals;
     }
 
-    function tokenSupply() public view returns (uint256) {
+    function maxTokenSupply() public view returns (uint256) {
+        return _maxTokenSupply;
+    }
+
+    function getTokenPrice() public view returns (uint256) {
+        return tokenPrice;
+    }
+
+
+    function currentTokenSupply() public view returns (uint256) {
         return _currentTokenSupply;
     }
 

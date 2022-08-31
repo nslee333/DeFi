@@ -2,20 +2,48 @@ import { time, loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { BigNumber, utils } from "ethers";
 
-describe("ERC-20", function () {
+describe("ERC-20v2", async () => {
 
-    // Functions:
+    async function fixture() {
+        const contractFactory = await ethers.getContractFactory("ERC20");
+        const contract = await contractFactory.deploy("Solari", "SL");
+        await contract.deployed();
 
-    // Constructor (name symbol)
+        return {contract};
+    }
 
-    // Name()
+    
 
-    // Symbol()
+    it("Name(): Should return the name of the token contract", async () => {
+        const {contract} = await loadFixture(fixture);
+        const tx = await contract.getName();
+        expect(tx).to.equal("Solari");
+    });
 
-    // Decimals()
+    it("Symbol(): Should return the symbol of the token contract", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const tx = await contract.getSymbol();
+        expect(tx).to.equal("SL");
+    });
+
+    it("decimals(): Should return the decimals of the token contract", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const tx = await contract.decimals();
+        expect(tx).to.equal(18);
+    });
 
     // totalSupply()
+    it("currentTokenSupply: Should return the current minted token supply.", async () => {
+        const {contract} = await loadFixture(fixture);
+        const tx = await contract.currentTokenSupply();
+        expect(tx).to.equal(0);
+    });
+
+    it("TokenPrice")
 
     // balanceOf(account)
 
@@ -33,7 +61,11 @@ describe("ERC-20", function () {
 
     // _transfer(from, to, amount)
 
+    // mint
+
     // _mint(account, amount)
+
+    // burn
 
     // _burn(account, amount)
 
