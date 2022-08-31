@@ -64,7 +64,7 @@ contract ERC20 {
     }
 
     function transfer(address _to, uint256 _amount) public {
-        require(_amount > 0, "Tranfer amount too small.");
+        require(_amount > 0, "Transfer amount too small.");
         require(_balances[_msgSender()] > _amount, "You don't have enough to transfer.");
         require(_to != address(0), "Cannot transfer to address 0.");
 
@@ -140,7 +140,7 @@ contract ERC20 {
     function mint(uint256 amount) public payable {
         require(amount > 0, "Cannot mint zero tokens.");
         uint256 requiredAmount = tokenPrice * amount;
-        require(requiredAmount >= msg.value, "Not enough Ether sent to complete minting.");
+        require(requiredAmount <= msg.value, "Not enough Ether sent to complete minting.");
         uint256 possibleTotal = amount * 10**18;
         uint256 possibleSupply = possibleTotal += _currentTokenSupply;
         require(possibleSupply <= _maxTokenSupply, "Maximum supply circulation reached.");
