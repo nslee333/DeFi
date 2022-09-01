@@ -341,7 +341,6 @@ describe("ERC-20v2", async () => {
         await expect(contract.transferFrom(address1.address, address2.address, amount)).to.be.revertedWith("Need an approval from the owner to transfer funds.");
     });
 
-    // increaseAllowance(spender, added value)
     it("IncreaseAllowance(): Should increase the allowance.", async () => {
         const {contract} = await loadFixture(fixture);
 
@@ -351,10 +350,48 @@ describe("ERC-20v2", async () => {
         
         const tx = await contract.increaseAllowance(address2.address, amount);
 
-        
+        const confirmation = await contract.allowances(address1.address, address2.address);
+        expect(confirmation.toString()).to.equal(amount.toString());
     });
 
-    // decreaseAllowance(spender, subtractedValue)
+    it("IncreaseAllowance(): Should revert at the first require statement.", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const [address1, address2] = await ethers.getSigners();
+
+        const amount = 0;
+
+        await expect(contract.increaseAllowance(address2.address, amount)).to.be.revertedWith("Allowance amount too small.");
+    });
+
+    it("DecreaseAllowance(): Should decrease the allowance to zero.", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const [address1, address2] = await ethers.getSigners();
+
+        const amount = 0;
+
+        const tx = await contract.decreaseAllowance(address2.address, amount);
+        await tx.wait();
+
+        const confirmation = await contract.allowances(address1.address, address2.address);
+
+        expect(confirmation.toString()).to.be.equal(amount.toString());
+    });
+
+    it("DecreaseAllowance(): Should decrease the allowance to lower number", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const [address1, address2] = await ethers.getSigners();
+
+        const amount = 3;
+
+        const tx = await contract.decreaseAllowance(address2.address, amount);
+        await tx.wait();
+
+        const confirmation = await contract.allowances(address1.address, address2.address);
+        expect(confirmation.toString()).to.equal(amount.toString());
+    });
 
     // _transfer(from, to, amount)
 
