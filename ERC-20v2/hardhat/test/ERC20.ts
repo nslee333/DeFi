@@ -47,7 +47,7 @@ describe("ERC-20v2", async () => {
         const {contract} = await loadFixture(fixture);
         const tx = await contract.maxTokenSupply();
 
-        const expectedValue = 1000000 * (10 ** 18);
+        const expectedValue = 10 * (10 ** 18);
 
         expect(tx.toString()).to.equal(expectedValue.toLocaleString("en-US", {useGrouping: false}));
     }); 
@@ -297,6 +297,37 @@ describe("ERC-20v2", async () => {
             );
     });
 
+    it("TransferFrom(): Should transfer tokens and call the spendAllowance function", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const [address1, address2] = await ethers.getSigners();
+
+        const addr1Contract = contract.connect(address1);
+        const amount = 5;
+        const value = amount * 0.0001;
+
+        const mintTx = await addr1Contract.mint
+        (
+            amount,
+            {
+                value: utils.parseEther(value.toString()),
+            }
+        );
+        await mintTx.wait();
+        const approvalAmnt = 3;
+
+        const approvalTx = await addr1Contract.approve(address2.address, approvalAmnt);
+        await approvalTx.wait();
+
+        const addr2Contract = contract.connect(address2);
+
+        const transferFromTx = await addr2Contract.transferFrom(address1.address, address2.address, approvalAmnt);
+        await transferFromTx.wait();
+
+        const confirmation = await addr2Contract.allowances(address1.address, address2.address);
+        expect(confirmation.toString()).to.equal("0");
+    })
+
     it("TransferFrom(): Should revert at the first require statement.", async () => {
         const {contract} = await loadFixture(fixture);
 
@@ -394,10 +425,122 @@ describe("ERC-20v2", async () => {
     });
 
     // _transfer(from, to, amount)
+    it("Mint(): Should mint tokens.", async () => {
+        const {contract} = await loadFixture(fixture);
 
-    // mint
+        const [address1] = await ethers.getSigners();
 
-    // _mint(account, amount)
+        const amount = 5 * 0.0001;
+
+        await expect(contract.mint
+        (
+            5, 
+            {
+                value: utils.parseEther(amount.toString()),
+            }
+        )).to.changeTokenBalance(
+            contract,
+            address1.address,
+            5
+        );
+    });
+
+    it("Mint(): Should revert at the first require statement", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const amount = 0;
+
+        await expect(contract.mint
+            (
+                amount,
+                {
+                    value: utils.parseEther(amount.toString()),
+                }
+            )).to.be.revertedWith("Cannot mint zero tokens.");
+    });
+
+    it("Mint(): Should revert at the second require statement", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const amount = 5;
+        
+        const value = 1 * 0.0001;
+
+        await expect(contract.mint
+            (
+                amount,
+                {
+                    value: utils.parseEther(value.toString())
+                }
+            )).to.be.revertedWith("Not enough Ether sent to complete minting.");
+    });
+
+    it("Mint(): Should revert at the third require statement", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const amount = 11;
+        const value = 11 * 0.0001;
+
+        await expect(contract.mint(
+            amount, 
+            {
+                value: utils.parseEther(value.toString()),
+            }
+        )).to.be.revertedWith("Maximum supply circulation reached.");
+    });
+
+    it("Burn(): Should burn tokens from an account", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const value = 5 * 0.0001;
+
+        const mintTx = await contract.mint
+        (
+            5, 
+            {
+                value: utils.parseEther(value.toString()),
+            }
+        );
+
+        const amount = 5;
+        const [address1] = await ethers.getSigners();
+
+        const burnTx = await contract.burn(amount);
+        await burnTx.wait();
+
+        const confirmation = await contract.balanceOf(address1.address);
+
+        expect(confirmation.toString()).to.equal("0");
+
+    });
+
+    it("Burn(): Should burn tokens and emit a Burn event", async () => {
+        const {contract} = await loadFixture(fixture);
+        const amount = 5;
+        const value = amount * 0.0001;
+
+        const [address1] = await ethers.getSigners();
+        
+        const mintTx = await contract.mint
+        (
+            amount,
+            {
+                value: utils.parseEther(value.toString()),
+            }
+        );
+        await mintTx.wait();
+
+        await expect(contract.burn(amount)).to.emit(contract, "Burn").withArgs(address1.address, amount);
+
+    }); 
+
+    it("Burn(): Should revert at the first require statement", async () => {
+        const {contract} = await loadFixture(fixture);
+        const amount = 0;
+
+        await expect(contract.burn(amount)).to.be.revertedWith("Cannot burn zero tokens.")
+    });
+
 
     // burn
 

@@ -16,7 +16,7 @@ contract ERC20 {
 
     uint256 private _currentTokenSupply;
 
-    uint256 private _maxTokenSupply = 1000000 * 10**18;
+    uint256 private _maxTokenSupply = 10 * 10**18;
 
     uint256 private _burnedTokens;
 
@@ -123,8 +123,6 @@ contract ERC20 {
     }
 
     function _transfer(address _from, address _to, uint256 _amount) private {
-        require(_to != address(0), "Cannot transfer to address 0.");
-
         _beforeTokenTransfer(_from, _to, _amount);
 
         _balances[_from] -= _amount;
@@ -156,7 +154,7 @@ contract ERC20 {
     }
 
     function burn(uint256 amount) public {
-        require(amount > 0, "Cannot burn zero tokens");
+        require(amount > 0, "Cannot burn zero tokens.");
 
         address account = _msgSender();
         _burn(account, amount);
@@ -194,10 +192,6 @@ contract ERC20 {
 
     function _msgSender() private view returns (address) {
         return msg.sender;
-    }
-
-    function msgSender() public view returns (address) {
-        return _msgSender();
     }
 
     event Transfer(address from, address to, uint256 value);
