@@ -14,8 +14,6 @@ describe("ERC-20v2", async () => {
         return {contract};
     }
 
-    
-
     it("Name(): Should return the name of the token contract.", async () => {
         const {contract} = await loadFixture(fixture);
         const tx = await contract.getName();
@@ -234,7 +232,7 @@ describe("ERC-20v2", async () => {
         await expect(contract.approve(address2.address, amount)).to.be.revertedWith("Allowance amount too small.");
     })
 
-    it("TransferFrom(): It should transfer from one account to another", async () => {
+    it("TransferFrom(): It should transfer from one account to another.", async () => {
         const {contract} = await loadFixture(fixture);
 
         const [address1, address2] = await ethers.getSigners();
@@ -267,7 +265,7 @@ describe("ERC-20v2", async () => {
         
     });
 
-    it("TransferFrom(): Should transfer tokens then emit a Transfer event", async () => {
+    it("TransferFrom(): Should transfer tokens then emit a Transfer event.", async () => {
         const {contract} = await loadFixture(fixture);
 
         const [address1, address2] = await ethers.getSigners();
@@ -297,7 +295,7 @@ describe("ERC-20v2", async () => {
             );
     });
 
-    it("TransferFrom(): Should transfer tokens and call the spendAllowance function", async () => {
+    it("TransferFrom(): Should transfer tokens and call the spendAllowance function.", async () => {
         const {contract} = await loadFixture(fixture);
 
         const [address1, address2] = await ethers.getSigners();
@@ -410,7 +408,7 @@ describe("ERC-20v2", async () => {
         expect(confirmation.toString()).to.be.equal(amount.toString());
     });
 
-    it("DecreaseAllowance(): Should decrease the allowance to lower number", async () => {
+    it("DecreaseAllowance(): Should decrease the allowance to lower number.", async () => {
         const {contract} = await loadFixture(fixture);
 
         const [address1, address2] = await ethers.getSigners();
@@ -445,7 +443,7 @@ describe("ERC-20v2", async () => {
         );
     });
 
-    it("Mint(): Should revert at the first require statement", async () => {
+    it("Mint(): Should revert at the first require statement.", async () => {
         const {contract} = await loadFixture(fixture);
 
         const amount = 0;
@@ -459,7 +457,7 @@ describe("ERC-20v2", async () => {
             )).to.be.revertedWith("Cannot mint zero tokens.");
     });
 
-    it("Mint(): Should revert at the second require statement", async () => {
+    it("Mint(): Should revert at the second require statement.", async () => {
         const {contract} = await loadFixture(fixture);
 
         const amount = 5;
@@ -475,7 +473,7 @@ describe("ERC-20v2", async () => {
             )).to.be.revertedWith("Not enough Ether sent to complete minting.");
     });
 
-    it("Mint(): Should revert at the third require statement", async () => {
+    it("Mint(): Should revert at the third require statement.", async () => {
         const {contract} = await loadFixture(fixture);
 
         const amount = 11;
@@ -489,7 +487,7 @@ describe("ERC-20v2", async () => {
         )).to.be.revertedWith("Maximum supply circulation reached.");
     });
 
-    it("Burn(): Should burn tokens from an account", async () => {
+    it("Burn(): Should burn tokens from an account.", async () => {
         const {contract} = await loadFixture(fixture);
 
         const value = 5 * 0.0001;
@@ -514,7 +512,7 @@ describe("ERC-20v2", async () => {
 
     });
 
-    it("Burn(): Should burn tokens and emit a Burn event", async () => {
+    it("Burn(): Should burn tokens and emit a Burn event.", async () => {
         const {contract} = await loadFixture(fixture);
         const amount = 5;
         const value = amount * 0.0001;
@@ -534,29 +532,10 @@ describe("ERC-20v2", async () => {
 
     }); 
 
-    it("Burn(): Should revert at the first require statement", async () => {
+    it("Burn(): Should revert at the first require statement.", async () => {
         const {contract} = await loadFixture(fixture);
         const amount = 0;
 
         await expect(contract.burn(amount)).to.be.revertedWith("Cannot burn zero tokens.")
     });
-
-
-    // burn
-
-    // _burn(account, amount)
-
-    // _approve(owner, spender, amount)
-
-    // _spendALlowance(owner, spender, amount)
-
-    // _beforeTokenTransfer(from, to, amount)
-
-    // _afterTokenTransfer(from, to, amount)
-
-    // events:
-
-    // Transfer(from, to, value)
-
-    // Approval(owner, spender, value)
 });
