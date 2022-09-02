@@ -136,7 +136,7 @@ contract ERC20 {
 
     function mint(uint256 amount) public payable {
         require(amount > 0, "Cannot mint zero tokens.");
-        uint256 requiredAmount = tokenPrice * amount;
+        uint256 requiredAmount = _tokenPrice * amount;
         require(requiredAmount <= msg.value, "Not enough Ether sent to complete minting.");
         uint256 possibleTotal = amount * 10**18;
         uint256 possibleSupply = possibleTotal += _currentTokenSupply;

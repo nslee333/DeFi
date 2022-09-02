@@ -1,5 +1,6 @@
 require('dotenv').config();
 require("@nomicfoundation/hardhat-toolbox");
+require("solidity-coverage");
 
 
 const ALCHEMY_KEY = process.env.ALCHEMY_API_KEY_URL;

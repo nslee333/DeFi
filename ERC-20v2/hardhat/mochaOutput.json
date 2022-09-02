@@ -1,0 +1,532 @@
+{
+ "stats": {
+  "suites": 1,
+  "tests": 37,
+  "passes": 37,
+  "pending": 0,
+  "failures": 0
+ },
+ "tests": [
+  {
+   "title": "getName(): Should return the name of the token contract.",
+   "fullTitle": "ERC-20v2 getName(): Should return the name of the token contract.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "getSymbol(): Should return the symbol of the token contract.",
+   "fullTitle": "ERC-20v2 getSymbol(): Should return the symbol of the token contract.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "getDecimals(): Should return the decimals of the token contract.",
+   "fullTitle": "ERC-20v2 getDecimals(): Should return the decimals of the token contract.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "maxTokenSupply(): Should return the maxTokenSupply of the token contract.",
+   "fullTitle": "ERC-20v2 maxTokenSupply(): Should return the maxTokenSupply of the token contract.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "getTokenPrice(): Should return the current token price.",
+   "fullTitle": "ERC-20v2 getTokenPrice(): Should return the current token price.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "currentTokenSupply(): Should return the current minted token supply.",
+   "fullTitle": "ERC-20v2 currentTokenSupply(): Should return the current minted token supply.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "BurnedTokens(): Should return the current amount of burned tokens.",
+   "fullTitle": "ERC-20v2 BurnedTokens(): Should return the current amount of burned tokens.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "balanceOf(): Should return the balance of the account.",
+   "fullTitle": "ERC-20v2 balanceOf(): Should return the balance of the account.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "BalanceOf(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 BalanceOf(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Transfer(): Should transfer an amount from one account to another.",
+   "fullTitle": "ERC-20v2 Transfer(): Should transfer an amount from one account to another.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Transfer(): Should transfer an amount from one account to another and emit an event.",
+   "fullTitle": "ERC-20v2 Transfer(): Should transfer an amount from one account to another and emit an event.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Transfer(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 Transfer(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Transfer(): Should revert at the second require statement.",
+   "fullTitle": "ERC-20v2 Transfer(): Should revert at the second require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Transfer(): Should revert at the third require statement.",
+   "fullTitle": "ERC-20v2 Transfer(): Should revert at the third require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Allowance(): Should display the allowance.",
+   "fullTitle": "ERC-20v2 Allowance(): Should display the allowance.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Allowance(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 Allowance(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Approve(): Should approve the allowance.",
+   "fullTitle": "ERC-20v2 Approve(): Should approve the allowance.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Approve(): Should approve the allowance and emit the Approval event.",
+   "fullTitle": "ERC-20v2 Approve(): Should approve the allowance and emit the Approval event.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Approve(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 Approve(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): It should transfer from one account to another.",
+   "fullTitle": "ERC-20v2 TransferFrom(): It should transfer from one account to another.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): Should transfer tokens then emit a Transfer event.",
+   "fullTitle": "ERC-20v2 TransferFrom(): Should transfer tokens then emit a Transfer event.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): Should transfer tokens and call the spendAllowance function.",
+   "fullTitle": "ERC-20v2 TransferFrom(): Should transfer tokens and call the spendAllowance function.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 TransferFrom(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): Should revert at the second require statement.",
+   "fullTitle": "ERC-20v2 TransferFrom(): Should revert at the second require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): Should revert at the third require statement.",
+   "fullTitle": "ERC-20v2 TransferFrom(): Should revert at the third require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): Should revert at the fourth require statement.",
+   "fullTitle": "ERC-20v2 TransferFrom(): Should revert at the fourth require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "IncreaseAllowance(): Should increase the allowance.",
+   "fullTitle": "ERC-20v2 IncreaseAllowance(): Should increase the allowance.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "IncreaseAllowance(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 IncreaseAllowance(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "DecreaseAllowance(): Should decrease the allowance to zero.",
+   "fullTitle": "ERC-20v2 DecreaseAllowance(): Should decrease the allowance to zero.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "DecreaseAllowance(): Should decrease the allowance to lower number.",
+   "fullTitle": "ERC-20v2 DecreaseAllowance(): Should decrease the allowance to lower number.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Mint(): Should mint tokens.",
+   "fullTitle": "ERC-20v2 Mint(): Should mint tokens.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Mint(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 Mint(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Mint(): Should revert at the second require statement.",
+   "fullTitle": "ERC-20v2 Mint(): Should revert at the second require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Mint(): Should revert at the third require statement.",
+   "fullTitle": "ERC-20v2 Mint(): Should revert at the third require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Burn(): Should burn tokens from an account.",
+   "fullTitle": "ERC-20v2 Burn(): Should burn tokens from an account.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Burn(): Should burn tokens and emit a Burn event.",
+   "fullTitle": "ERC-20v2 Burn(): Should burn tokens and emit a Burn event.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Burn(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 Burn(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  }
+ ],
+ "failures": [],
+ "passes": [
+  {
+   "title": "getName(): Should return the name of the token contract.",
+   "fullTitle": "ERC-20v2 getName(): Should return the name of the token contract.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "getSymbol(): Should return the symbol of the token contract.",
+   "fullTitle": "ERC-20v2 getSymbol(): Should return the symbol of the token contract.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "getDecimals(): Should return the decimals of the token contract.",
+   "fullTitle": "ERC-20v2 getDecimals(): Should return the decimals of the token contract.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "maxTokenSupply(): Should return the maxTokenSupply of the token contract.",
+   "fullTitle": "ERC-20v2 maxTokenSupply(): Should return the maxTokenSupply of the token contract.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "getTokenPrice(): Should return the current token price.",
+   "fullTitle": "ERC-20v2 getTokenPrice(): Should return the current token price.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "currentTokenSupply(): Should return the current minted token supply.",
+   "fullTitle": "ERC-20v2 currentTokenSupply(): Should return the current minted token supply.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "BurnedTokens(): Should return the current amount of burned tokens.",
+   "fullTitle": "ERC-20v2 BurnedTokens(): Should return the current amount of burned tokens.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "balanceOf(): Should return the balance of the account.",
+   "fullTitle": "ERC-20v2 balanceOf(): Should return the balance of the account.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "BalanceOf(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 BalanceOf(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Transfer(): Should transfer an amount from one account to another.",
+   "fullTitle": "ERC-20v2 Transfer(): Should transfer an amount from one account to another.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Transfer(): Should transfer an amount from one account to another and emit an event.",
+   "fullTitle": "ERC-20v2 Transfer(): Should transfer an amount from one account to another and emit an event.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Transfer(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 Transfer(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Transfer(): Should revert at the second require statement.",
+   "fullTitle": "ERC-20v2 Transfer(): Should revert at the second require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Transfer(): Should revert at the third require statement.",
+   "fullTitle": "ERC-20v2 Transfer(): Should revert at the third require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Allowance(): Should display the allowance.",
+   "fullTitle": "ERC-20v2 Allowance(): Should display the allowance.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Allowance(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 Allowance(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Approve(): Should approve the allowance.",
+   "fullTitle": "ERC-20v2 Approve(): Should approve the allowance.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Approve(): Should approve the allowance and emit the Approval event.",
+   "fullTitle": "ERC-20v2 Approve(): Should approve the allowance and emit the Approval event.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Approve(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 Approve(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): It should transfer from one account to another.",
+   "fullTitle": "ERC-20v2 TransferFrom(): It should transfer from one account to another.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): Should transfer tokens then emit a Transfer event.",
+   "fullTitle": "ERC-20v2 TransferFrom(): Should transfer tokens then emit a Transfer event.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): Should transfer tokens and call the spendAllowance function.",
+   "fullTitle": "ERC-20v2 TransferFrom(): Should transfer tokens and call the spendAllowance function.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 TransferFrom(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): Should revert at the second require statement.",
+   "fullTitle": "ERC-20v2 TransferFrom(): Should revert at the second require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): Should revert at the third require statement.",
+   "fullTitle": "ERC-20v2 TransferFrom(): Should revert at the third require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "TransferFrom(): Should revert at the fourth require statement.",
+   "fullTitle": "ERC-20v2 TransferFrom(): Should revert at the fourth require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "IncreaseAllowance(): Should increase the allowance.",
+   "fullTitle": "ERC-20v2 IncreaseAllowance(): Should increase the allowance.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "IncreaseAllowance(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 IncreaseAllowance(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "DecreaseAllowance(): Should decrease the allowance to zero.",
+   "fullTitle": "ERC-20v2 DecreaseAllowance(): Should decrease the allowance to zero.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "DecreaseAllowance(): Should decrease the allowance to lower number.",
+   "fullTitle": "ERC-20v2 DecreaseAllowance(): Should decrease the allowance to lower number.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Mint(): Should mint tokens.",
+   "fullTitle": "ERC-20v2 Mint(): Should mint tokens.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Mint(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 Mint(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Mint(): Should revert at the second require statement.",
+   "fullTitle": "ERC-20v2 Mint(): Should revert at the second require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Mint(): Should revert at the third require statement.",
+   "fullTitle": "ERC-20v2 Mint(): Should revert at the third require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Burn(): Should burn tokens from an account.",
+   "fullTitle": "ERC-20v2 Burn(): Should burn tokens from an account.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Burn(): Should burn tokens and emit a Burn event.",
+   "fullTitle": "ERC-20v2 Burn(): Should burn tokens and emit a Burn event.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Burn(): Should revert at the first require statement.",
+   "fullTitle": "ERC-20v2 Burn(): Should revert at the first require statement.",
+   "file": "test\\ERC20.ts",
+   "currentRetry": 0,
+   "err": {}
+  }
+ ]
+}

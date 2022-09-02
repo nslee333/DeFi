@@ -14,32 +14,26 @@ describe("ERC-20v2", async () => {
         return {contract};
     }
 
-    it("Name(): Should return the name of the token contract.", async () => {
+    it("getName(): Should return the name of the token contract.", async () => {
         const {contract} = await loadFixture(fixture);
         const tx = await contract.getName();
         expect(tx).to.equal("Solari");
     });
 
-    it("Symbol(): Should return the symbol of the token contract.", async () => {
+    it("getSymbol(): Should return the symbol of the token contract.", async () => {
         const {contract} = await loadFixture(fixture);
 
         const tx = await contract.getSymbol();
         expect(tx).to.equal("SL");
     });
 
-    it("decimals(): Should return the decimals of the token contract.", async () => {
+    it("getDecimals(): Should return the decimals of the token contract.", async () => {
         const {contract} = await loadFixture(fixture);
 
         const tx = await contract.getDecimals();
         expect(tx).to.equal(18);
     });
 
-    // totalSupply()
-    it("currentTokenSupply(): Should return the current minted token supply.", async () => {
-        const {contract} = await loadFixture(fixture);
-        const tx = await contract.currentTokenSupply();
-        expect(tx).to.equal(0);
-    });
 
     it("maxTokenSupply(): Should return the maxTokenSupply of the token contract.", async () => {
         const {contract} = await loadFixture(fixture);
@@ -49,6 +43,28 @@ describe("ERC-20v2", async () => {
 
         expect(tx.toString()).to.equal(expectedValue.toLocaleString("en-US", {useGrouping: false}));
     }); 
+
+    it("getTokenPrice(): Should return the current token price.", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const tokenPrice = 0.0001 * (10**18)
+
+        const tx = await contract.getTokenPrice();
+        expect(tx.toString()).to.equal(tokenPrice.toString());
+    });
+
+    it("currentTokenSupply(): Should return the current minted token supply.", async () => {
+        const {contract} = await loadFixture(fixture);
+        const tx = await contract.currentTokenSupply();
+        expect(tx).to.equal(0);
+    });
+
+    it("BurnedTokens(): Should return the current amount of burned tokens.", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const tx = await contract.getBurnedTokens();
+        expect(tx.toString()).to.equal("0");
+    });
 
     it("balanceOf(): Should return the balance of the account.", async () => {
         const {contract} = await loadFixture(fixture);
@@ -264,6 +280,7 @@ describe("ERC-20v2", async () => {
             );
         
     });
+
 
     it("TransferFrom(): Should transfer tokens then emit a Transfer event.", async () => {
         const {contract} = await loadFixture(fixture);
@@ -537,18 +554,5 @@ describe("ERC-20v2", async () => {
         const amount = 0;
 
         await expect(contract.burn(amount)).to.be.revertedWith("Cannot burn zero tokens.")
-    });
-
-    it("getTokenPrice(): Should return the current token price.", async () => {
-        const {contract} = await loadFixture(fixture);
-
-        const tx = await contract.getTokenPrice();
-        expect(tx.toString()).to.equal("0.0001");
-    });
-
-    it("BurnedTokens(): Should return the current amount of burned tokens.", async () => {
-        const {contract} = await loadFixture(fixture);
-
-        const tx = await contract.getBurnedTokens();
     });
 });
