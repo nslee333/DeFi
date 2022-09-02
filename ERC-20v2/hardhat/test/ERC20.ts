@@ -538,4 +538,17 @@ describe("ERC-20v2", async () => {
 
         await expect(contract.burn(amount)).to.be.revertedWith("Cannot burn zero tokens.")
     });
+
+    it("getTokenPrice(): Should return the current token price.", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const tx = await contract.getTokenPrice();
+        expect(tx.toString()).to.equal("0.0001");
+    });
+
+    it("BurnedTokens(): Should return the current amount of burned tokens.", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const tx = await contract.getBurnedTokens();
+    });
 });

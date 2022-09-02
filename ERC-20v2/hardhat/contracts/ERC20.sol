@@ -6,13 +6,13 @@ import "hardhat/console.sol";
 
 contract ERC20 {
 
-    string private name;
+    string private _name;
 
-    string private symbol;
+    string private _symbol;
 
-    uint8 private decimals = 18;
+    uint8 private _decimals = 18;
 
-    uint256 private tokenPrice = 0.0001 ether;
+    uint256 private _tokenPrice = 0.0001 ether;
 
     uint256 private _currentTokenSupply;
 
@@ -24,21 +24,21 @@ contract ERC20 {
     
     mapping(address => mapping(address => uint256)) private _allowances;
 
-    constructor(string memory _name, string memory _symbol) {
-        name = _name;
-        symbol = _symbol;
+    constructor(string memory name, string memory symbol) {
+        _name = name;
+        _symbol = symbol;
     }
 
     function getName() public view returns (string memory) {
-        return name;
+        return _name;
     }
 
     function getSymbol() public view returns (string memory) {
-        return symbol;
+        return _symbol;
     }
 
     function getDecimals() public view returns (uint8) {
-        return decimals;
+        return _decimals;
     }
 
     function maxTokenSupply() public view returns (uint256) {
@@ -46,7 +46,7 @@ contract ERC20 {
     }
 
     function getTokenPrice() public view returns (uint256) {
-        return tokenPrice;
+        return _tokenPrice;
     }
 
 
@@ -54,7 +54,7 @@ contract ERC20 {
         return _currentTokenSupply;
     }
 
-    function burnedTokens() public view returns (uint256) {
+    function getBurnedTokens() public view returns (uint256) {
         return _burnedTokens;
     }
 
