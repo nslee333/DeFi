@@ -51,7 +51,7 @@ contract ERC20 {
         return balances[_owner];
     }
 
-    function transfer(address _to, uint256 _amount) public  {
+    function transfer(address _to, uint256 _amount) public {
         require(_to != address(0), "Cannot transfer to the zero address.");
         require(_amount > 0, "Cannot transfer zero tokens.");
 
