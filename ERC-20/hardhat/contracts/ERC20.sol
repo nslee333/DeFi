@@ -118,18 +118,12 @@ contract ERC20 {
     }
 
     function mint(uint256 amount) public payable {
-        require(tokenSupply > 0, "Not enough supply");
         require(msg.value > tokenPrice, "Not enough ether sent.");
         // require(msg.value > value, "Not enough Ether sent");
 
        
         uint256 mintAmount = tokenSupply - amount;
         
-
-
-        require(mintAmount < tokenSupply, "Not enough Token Supply.");
-
-
         uint256 newTokenSupply = tokenSupply - mintAmount;
         tokenSupply = newTokenSupply;
         balances[msg.sender] += mintAmount;

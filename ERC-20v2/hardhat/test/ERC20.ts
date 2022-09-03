@@ -246,7 +246,18 @@ describe("ERC-20v2", async () => {
         const amount = 0;
 
         await expect(contract.approve(address2.address, amount)).to.be.revertedWith("Allowance amount too small.");
-    })
+    });
+
+    it("Approve(): Should revert at the _approve require statement", async () => {
+        const {contract} = await loadFixture(fixture);
+
+        const address0 = ethers.constants.AddressZero;
+
+        const amount = 5;
+
+        await expect(contract.approve(address0, amount.toString())).to.be.revertedWith("Cannot give approval to address 0.");
+
+    });
 
     it("TransferFrom(): It should transfer from one account to another.", async () => {
         const {contract} = await loadFixture(fixture);

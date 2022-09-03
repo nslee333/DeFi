@@ -200,4 +200,8 @@ contract ERC20 {
 
     event Burn(address account, uint256 value);
 
+    receive() external payable {}
+
+    fallback() external payable {}
+
 }
