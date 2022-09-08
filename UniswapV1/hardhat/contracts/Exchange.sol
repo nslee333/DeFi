@@ -8,30 +8,34 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 contract Exchange is ERC20 {
 
     address tokenContract;
+    address LPTokenContract;
 
     constructor(address _tokenContract) ERC20("LiquidityToken", "LP") {
         tokenContract = _tokenContract;
+        LPTokenContract = ERC20(LiquidityToken);
     }
 
-    
-    
     function addLiquidity(uint256 tokenAmount, uint256 deadline) public payable returns (uint256) {
-        // Approve. 
-        // transferFrom(tokenContract, address(this), tokenAmount);
+        require(deadline > block.timestamp, "Deadline has passed.");
+        uint256 maxAllowance = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
+        ERC20(tokenContract).approve(address(this), maxAllowance);
+        ERC20(tokenContract).transferFrom(msg.sender, address(this), tokenAmount);
 
-        // Revert transaction if deadline has passed.
+        uint256 ethAmount = msg.value;
+        uint256 ERC20TokenAmount = tokenAmount;
+        uint256 liquidityAmount = ethAmount * ERC20TokenAmount; // Just minting the Invariable's amount of LP tokens to the LP.
 
+        _mint(msg.sender, liquidityAmount);
+    }
+
+    function removeLiquidity(uint256 lpTokenAmount, uint256 deadline) public returns (uint256, uin256) {
+        require(deadline > block.timestamp, "Deadline has passed.");
         
-
-
     }
 
 
     /*
-   addLiquidity function.
-   1. LP adds an equal amount of ERC-20 and ETH.
-   2. Mints LP Tokens in exchange realitive to the tokens provided. 
-   3. Deadline.
+   
 
 
    removeLiquidity function.
