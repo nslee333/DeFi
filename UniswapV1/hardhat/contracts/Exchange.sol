@@ -35,6 +35,7 @@ contract Exchange is ERC20 {
         liquidityBalance[msg.sender] = liquidityAmount;
 
         _mint(msg.sender, liquidityAmount);
+        return liquidityAmount;
     }
 
     function removeLiquidity(uint256 lpTokenAmount, uint256 deadline) public returns (uint256, uint256) {
@@ -73,7 +74,7 @@ contract Exchange is ERC20 {
         return ethSwapped;
     }
 
-    function tokenToEthSwapTransfer(uint256 tokenAmount, address recipient, uint256 deadline) public payable (bool success) {
+    function tokenToEthSwapTransfer(uint256 tokenAmount, address recipient, uint256 deadline) public payable returns (bool success) {
         require(deadline > block.timestamp, "Deadline has passed.");
         require(tokenAmount > 0, "Cannot swap zero tokens.");
         uint256 ethReserves = address(this).balance;
@@ -97,25 +98,24 @@ contract Exchange is ERC20 {
 
         uint256 tokenSwapAmount = ((ethAmount / invariant) * 100) / 97;
 
-        ERC20(tokenContract).transfer(recipient, ethAmount);
+        ERC20(tokenContract).transfer(recipient, tokenSwapAmount);
         return ethAmount;
     }
 
     function ethToTokenSwapTransfer(address recipient, uint256 deadline) public payable returns (bool success) {
         require(deadline > block.timestamp, "Deadline has passed");
-        uint256 ethAmount = msg.value;
 
         uint256 ethReserves = address(this).balance - msg.value;
         uint256 tokenReserve = getReserves();
-        uint256 invariant = ethReserves * tokenReserves;
+        uint256 invariant = ethReserves * tokenReserve;
 
         uint256 tokenSwapAmount = ((ethReserves/invariant) * 100) / 97;
 
-        ERC(tokenContract).transfer(address(this), recipient, tokenSwapAmount);
+        ERC20(tokenContract).transfer(recipient, tokenSwapAmount);
         return true;
     }
 
-    function currentReserves() public returns (uint256, uint256) {
+    function currentReserves() public view returns (uint256, uint256) {
         uint256 ethReserves = address(this).balance;
         uint256 tokenReserves = getReserves();
 
