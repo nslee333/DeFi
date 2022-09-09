@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 contract Exchange is ERC20 {
 
     address public tokenContract;
-    address public LPTokenContract;
 
     mapping(address => uint256) private liquidityBalance;
 

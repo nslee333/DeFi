@@ -23,14 +23,30 @@ describe("Exchange", function () {
     }
 
     it("getLiquidityBalance(): Should return a balance of an address.", async () => {
+        const {exchange, address1} = await loadFixture(fixture);
 
+        const tx = await exchange.getLiquidityBalance(address1.address);
+
+        expect(tx.toString()).to.equal("0");
     });
 
     it("getReserves(): Should return the Exchange's ERC-20 balance.", async () => {
+        const {exchange} = await loadFixture(fixture);
+        const tx = await exchange.getReserves();
 
+        expect(tx.toString()).to.equal("0");
     });
 
     it("addLiquidity(): Should successfully add liquidity.", async () => {
+        const {exchange, solari} = await loadFixture(fixture);
+
+        const mintTx = await solari.mint()
+        // Mint solari to address1.
+
+        // Then take an equal amount of solari and eth and addLiquidity.
+
+        // expect balance of address1 LP tokens to equal amount of eth passed in.
+
 
     });
 
