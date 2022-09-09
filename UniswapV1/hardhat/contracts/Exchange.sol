@@ -7,8 +7,8 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Exchange is ERC20 {
 
-    address tokenContract;
-    address LPTokenContract;
+    address public tokenContract;
+    address public LPTokenContract;
 
     mapping(address => uint256) private liquidityBalance;
 
@@ -16,11 +16,11 @@ contract Exchange is ERC20 {
         tokenContract = _tokenContract;
     }
 
-    function getLiquidityBalance(address owner) public returns (uint256) {
+    function getLiquidityBalance(address owner) public view returns (uint256) {
         return liquidityBalance[owner];
     }
 
-    function getReserves() public returns (uint256) {
+    function getReserves() public view returns (uint256) {
         return ERC20(tokenContract).balanceOf(address(this));
     }
 
@@ -31,7 +31,7 @@ contract Exchange is ERC20 {
         ERC20(tokenContract).transferFrom(msg.sender, address(this), tokenAmount);
 
         uint256 ethAmount = msg.value;
-        uint256 liquidityAmount = ethAmount; // Just minting the Invariable's amount of LP tokens to the LP.
+        uint256 liquidityAmount = ethAmount; 
         liquidityBalance[msg.sender] = liquidityAmount;
 
         _mint(msg.sender, liquidityAmount);
@@ -73,11 +73,17 @@ contract Exchange is ERC20 {
         return ethSwapped;
     }
 
-    function tokenToEthSwapTransfer(uint256 tokenAmount, address recipient, uint256 deadline) public payable {
+    function tokenToEthSwapTransfer(uint256 tokenAmount, address recipient, uint256 deadline) public payable (bool success) {
         require(deadline > block.timestamp, "Deadline has passed.");
         require(tokenAmount > 0, "Cannot swap zero tokens.");
-
-
+        uint256 ethReserves = address(this).balance;
+        uint256 tokenReserves = getReserves();
+        uint256 invariant = ethReserves * tokenReserves;
+        
+        uint256 ethSwapAmount = ((tokenReserves/invariant) * 100 ) / 97;
+        (bool sent,) = recipient.call{value: ethSwapAmount}("");
+        require(sent, "Failed to send ether.");
+        return true;
     }
 
     function ethToTokenSwap(uint256 deadline) public payable returns (uint256) {
@@ -95,40 +101,26 @@ contract Exchange is ERC20 {
         return ethAmount;
     }
 
+    function ethToTokenSwapTransfer(address recipient, uint256 deadline) public payable returns (bool success) {
+        require(deadline > block.timestamp, "Deadline has passed");
+        uint256 ethAmount = msg.value;
 
+        uint256 ethReserves = address(this).balance - msg.value;
+        uint256 tokenReserve = getReserves();
+        uint256 invariant = ethReserves * tokenReserves;
 
+        uint256 tokenSwapAmount = ((ethReserves/invariant) * 100) / 97;
 
-    /*
-   
+        ERC(tokenContract).transfer(address(this), recipient, tokenSwapAmount);
+        return true;
+    }
 
+    function currentReserves() public returns (uint256, uint256) {
+        uint256 ethReserves = address(this).balance;
+        uint256 tokenReserves = getReserves();
 
-   
-   tokenToEthSwapTransfer
-   - Same as above plus sending to a receipient address.
-   - Fee removed.
-
-   
-
-    ethToTokenSwapTransfer
-    - Same as above plus sending to a receipient address.
-    - Fee removed.
-
-
-    currentLiquiditty, returns ERC-20 and ETH token reserves for display.
-
-
-
-   
-
-
-
-
-
-
-
-    
-    */
-    
+        return (ethReserves, tokenReserves);
+    }   
     
 }
 
