@@ -56,9 +56,9 @@ contract Exchange is ERC20 {
         return (ethAmount, tokenAmount); 
     }
 
-    function tokenToEthSwap(uint256 tokens, uint256 deadline) public returns (uint256) {
+    function tokenToEthSwap(uint256 tokens, uint256 deadline) public payable returns (uint256) {
         require(deadline > block.timestamp, "Deadline has passed.");
-        require(tokens > 0, "Cannot swap zero tokens");
+        require(tokens > 0, "Cannot swap zero tokens.");
 
         uint256 tokenReserves = getReserves();
         uint256 ethReserves = address(this).balance;
@@ -73,32 +73,41 @@ contract Exchange is ERC20 {
         return ethSwapped;
     }
 
-    function tokenToEthSwap(uint256 deadline) public returns (uint256) {
-        require(deadline > block.timestamp, "Deadline has passed");
-        
+    function tokenToEthSwapTransfer(uint256 tokenAmount, address recipient, uint256 deadline) public payable {
+        require(deadline > block.timestamp, "Deadline has passed.");
+        require(tokenAmount > 0, "Cannot swap zero tokens.");
+
+
     }
+
+    function ethToTokenSwap(uint256 deadline) public payable returns (uint256) {
+        require(deadline > block.timestamp, "Deadline has passed");
+        uint256 ethAmount = msg.value;
+        address recipient = msg.sender;
+
+        uint256 tokenReserve = getReserves();
+        uint256 ethReserves = address(this).balance - msg.value;
+        uint256 invariant = tokenReserve * ethReserves;
+
+        uint256 tokenSwapAmount = ((ethAmount / invariant) * 100) / 97;
+
+        ERC20(tokenContract).transfer(recipient, ethAmount);
+        return ethAmount;
+    }
+
+
 
 
     /*
    
 
 
-   removeLiquidity function.
-   1. Burns LP tokens.
-   2. Gets ERC-20 and ETH tokens returned according to the LP tokens burned.
-   3. Deadline.
-
-   tokenToEthSwap function.
-   - Sell ERC-20 and get ETH returned.
-   - Fee removed.
-
+   
    tokenToEthSwapTransfer
    - Same as above plus sending to a receipient address.
    - Fee removed.
 
-   ethToTokenSwap function.
-    - Sell ETH and get ERC-20 tokens back.
-    - Fee removed.
+   
 
     ethToTokenSwapTransfer
     - Same as above plus sending to a receipient address.
