@@ -6,9 +6,6 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Solari is ERC20 {
 
-    address private owner;
-    
-    constructor () ERC20("Solari", "SL") {
-        owner = msg.sender;
-    }
+    constructor () ERC20("Solari", "SL") {}
+
 }
