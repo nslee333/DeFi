@@ -2,6 +2,7 @@ import { time, loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { utils, BigNumber } from "ethers";
 
 describe("Exchange", function () {
 
@@ -38,15 +39,34 @@ describe("Exchange", function () {
     });
 
     it("addLiquidity(): Should successfully add liquidity.", async () => {
-        const {exchange, solari} = await loadFixture(fixture);
+        const {exchange, solari, address1} = await loadFixture(fixture);
 
-        const mintTx = await solari.mint()
-        // Mint solari to address1.
+        const mintAmount: number = 10 * 0.0001;
 
-        // Then take an equal amount of solari and eth and addLiquidity.
+        const mintTx: any = await solari.mint
+        (
+            10,
+            {
+                value: utils.parseEther(mintAmount.toString())
+            }
+        );
+        await mintTx.wait();
 
-        // expect balance of address1 LP tokens to equal amount of eth passed in.
+        const tokenAmount: string = "10";
 
+        const timeNow: number = await time.latest();
+        const timeDeadline: number = timeNow + 3600;
+
+
+
+        await expect(exchange.addLiquidity(utils.parseEther(tokenAmount), timeDeadline)).to.changeEtherBalance(address1.address, "-10");
+        
+        // expect(exchange.balanceOf(address1.address)).to.equal("10");
+
+        // const confirmation: BigNumber = await solari.balanceOf(address1.address);
+
+        // expect(confirmation.toString()).to.equal("10");
+       
 
     });
 

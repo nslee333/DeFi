@@ -3,7 +3,7 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-
+import "hardhat/console.sol";
 
 contract Exchange is ERC20 {
 
@@ -25,8 +25,9 @@ contract Exchange is ERC20 {
 
     function addLiquidity(uint256 tokenAmount, uint256 deadline) public payable returns (uint256) {
         require(deadline > block.timestamp, "Deadline has passed.");
-        uint256 maxAllowance = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
+        uint256 maxAllowance = tokenAmount;
         ERC20(tokenContract).approve(address(this), maxAllowance);
+        // console.log(ERC20(tokenContract).allowance(msg.sender, address(this)));
         ERC20(tokenContract).transferFrom(msg.sender, address(this), tokenAmount);
 
         uint256 ethAmount = msg.value;
