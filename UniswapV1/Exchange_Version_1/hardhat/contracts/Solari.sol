@@ -13,7 +13,12 @@ contract Solari is ERC20 {
     function mint(uint256 tokenAmount) public payable {
         uint256 requiredAmount = tokenAmount * tokenPrice;
         require(requiredAmount >= msg.value, "Not enough ether sent.");
-        _mint(msg.sender, tokenAmount);
+        uint256 convertedMintAmount = tokenAmount * (10**18);
+        _mint(msg.sender, convertedMintAmount);
     }
+
+    receive() external payable {}
+
+    fallback() external payable {}
 
 }

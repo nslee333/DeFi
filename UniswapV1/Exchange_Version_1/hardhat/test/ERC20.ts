@@ -51,30 +51,73 @@ describe("Exchange", function () {
             }
         );
         await mintTx.wait();
+        
 
         const tokenAmount: string = "10";
+        const tokenApproval: string = "15"
+
+        const approval = await solari.approve(exchange.address, utils.parseEther(tokenApproval));
+        await approval.wait();
+
+
 
         const timeNow: number = await time.latest();
         const timeDeadline: number = timeNow + 3600;
 
-
-
-        await expect(exchange.addLiquidity(utils.parseEther(tokenAmount), timeDeadline)).to.changeEtherBalance(address1.address, "-10");
+        await expect(exchange.addLiquidity(utils.parseEther(tokenAmount), timeDeadline,
+        {
+            value: utils.parseEther(tokenAmount),
+        }
+        )).to.changeEtherBalance(address1.address, BigNumber.from("-10000000000000000000"));
         
-        // expect(exchange.balanceOf(address1.address)).to.equal("10");
+        expect(await exchange.balanceOf(address1.address)).to.equal("10000000000000000000");
 
-        // const confirmation: BigNumber = await solari.balanceOf(address1.address);
+        const confirmation: BigNumber = await solari.balanceOf(address1.address);
 
-        // expect(confirmation.toString()).to.equal("10");
+        expect(confirmation.toString()).to.equal("0");
        
-
     });
 
     it("addLiquidity(): Should revert at the deadline require statement.", async () => {
+        const {exchange} = await loadFixture(fixture);
+
+        const amount: string = "10";
+        const currentTime: number = await time.latest();
+        const deadline: number = currentTime - 3600;
+
+        await expect(exchange.addLiquidity(utils.parseEther(amount), deadline)).to.be.revertedWith("Deadline has passed.");
 
     });
     
     it("removeLiquidity(): Should remove liquidity.", async () => {
+        const {exchange, solari, address1} = await loadFixture(fixture);
+
+        const value: number = 10 * 0.0001;
+        const tokens = 10;
+
+        const mintTx: any = await solari.mint(
+            tokens,
+            {
+                value: utils.parseEther(value.toString())
+            }
+        );
+        await mintTx.wait();
+
+        const approvalTx = await solari.approve(exchange.address, utils.parseEther(tokens.toString()));
+        await approvalTx.wait();
+
+        const timeNow = await time.latest();
+        const deadline = timeNow + 3600;
+
+
+        const addTx: any = await exchange.addLiquidity(utils.parseEther(tokens.toString()), deadline, {value: utils.parseEther(tokens.toString())});
+        await addTx.wait();
+
+        expect(await exchange.removeLiquidity(utils.parseEther(tokens.toString()), deadline)).to.changeEtherBalance(address1.address, BigNumber.from(utils.parseEther("10")));
+
+        expect(await solari.balanceOf(address1.address)).to.equal(BigNumber.from(utils.parseEther("10")));
+
+        expect(await exchange.balanceOf(address1.address)).to.equal(0);
 
     });
 
