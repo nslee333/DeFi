@@ -62,6 +62,7 @@ contract Exchange is ERC20 {
         uint256 ethReserves = address(this).balance;
 
         uint256 invariant = tokenReserves * ethReserves;
+        console.log(invariant, ethReserves, tokenReserves);
 
         uint256 ethSwapped = ((tokens/invariant) * 100) / 97;
         address recipient = msg.sender;
