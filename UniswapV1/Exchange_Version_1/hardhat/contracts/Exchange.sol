@@ -39,7 +39,6 @@ contract Exchange is ERC20 {
         require(deadline > block.timestamp, "Deadline has passed.");
         require(lpTokenAmount > 0, "Please increase the amount of liquidity you wish to burn.");
 
-
         uint256 ethAmount = lpTokenAmount;
         uint256 tokenAmount = lpTokenAmount;
         address recipient = msg.sender;

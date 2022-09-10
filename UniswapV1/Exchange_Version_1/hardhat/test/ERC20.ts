@@ -15,12 +15,21 @@ describe("Exchange", function () {
         const exchange = await exchangeFactory.deploy(solari.address);
         await exchange.deployed();
 
+        const testFactory = await ethers.getContractFactory("Test");
+        const test = await testFactory.deploy();
+        await test.deployed();
+
         const address0 = ethers.constants.AddressZero;
 
         const [address1, address2] = await ethers.getSigners();
 
+        const currentTime = await time.latest();
+        const futureDeadline = currentTime + 3600;
+        const passedDeadline = currentTime - 3600;
+        
 
-        return {solari, exchange, address0, address1, address2};
+
+        return {solari, exchange, test, address0, address1, address2, futureDeadline, passedDeadline};
     }
 
     it("getLiquidityBalance(): Should return a balance of an address.", async () => {
@@ -122,14 +131,46 @@ describe("Exchange", function () {
     });
 
     it("removeLiquidity(): Should revert at the deadline require expression.", async () => {
+        const {exchange} = await loadFixture(fixture);
 
+        const currentTime: number = await time.latest();
+        const deadline = currentTime - 3600;
+        const tokens: string = "10";
+
+        await expect(exchange.removeLiquidity(utils.parseEther(tokens), deadline)).to.be.revertedWith("Deadline has passed.");
     });
 
     it("removeLiquidity(): Should revert at the lpTokenAmount require expression.", async () => {
+        const {exchange} = await loadFixture(fixture);
 
+        const currentTime = await time.latest();
+        const deadline = currentTime + 3600;
+        const tokens: number = 0;
+
+        await expect(exchange.removeLiquidity(tokens, deadline)).to.be.revertedWith("Please increase the amount of liquidity you wish to burn.");
     });
 
     it("removeLiquidity(): Should revert at the sentEtherViaCall require expression.", async () => {
+        const {exchange, solari, test, futureDeadline} = await loadFixture(fixture);
+
+        const tokens = 10;
+        const mintAmount = tokens * 0.0001;
+        const mintTx = await solari.mint(
+            tokens,
+            {
+                value: utils.parseEther(mintAmount.toString())
+            }
+        );
+        await mintTx.wait();
+
+        const approveTx = await solari.approve(exchange.address, tokens);
+        await approveTx.wait();
+
+        const liqTx = await exchange.addLiquidity(tokens, futureDeadline);
+
+        const connectedDexWithTest = exchange.connect(test.address);
+
+        await expect(connectedDexWithTest.removeLiquidity(tokens, futureDeadline)).to.be.revertedWith("Failed to send ether.");
 
     });
 
