@@ -66,6 +66,7 @@ contract Exchange is ERC20 {
 
         uint256 ethSwapped = ((tokens/invariant) * 100) / 97;
         address recipient = msg.sender;
+        console.log((tokens/invariant) * 100);
 
         (bool sent,) = recipient.call{value: ethSwapped}("");
         require(sent, "Failed to send ether.");

@@ -174,17 +174,22 @@ describe("Exchange", function () {
         await mintTx.wait();
 
         const liqAmount = 10;
-        const liqTotalAmount = 
+
+        const approvalTx = await solari.approve(exchange.address, utils.parseEther(liqAmount.toString()));
+        await approvalTx.wait();
+        
+        const liqTx = await exchange.addLiquidity(utils.parseEther(liqAmount.toString()), futureDeadline,{
+            value: utils.parseEther(liqAmount.toString()),
+        });
+        await liqTx.wait();
+    
 
 
-        const liquidityTx = exchange.addLiquidity()
 
 
 
 
-
-
-        await expect(exchange.tokenToEthSwap(mintAmount, futureDeadline)).to.changeTokenBalance(solari, address1.address, -10);
+        await expect(exchange.tokenToEthSwap(liqAmount, futureDeadline)).to.changeEtherBalance(address1.address, utils.parseEther(liqAmount.toString()));
 
         // await expect()
     });
