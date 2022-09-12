@@ -161,27 +161,27 @@ describe("Exchange", function () {
     });
 
     it("tokenToEthSwap(): Should swap ERC-20 tokens to ETH.", async () => {
-        const {solari, exchange, futureDeadline, address1} = await loadFixture(fixture);
+        // const {solari, exchange, futureDeadline, address1} = await loadFixture(fixture);
 
-        const mintAmount = 20;
-        const mintAmountTotal = 20 * 0.0001;
-        const mintTx = await solari.mint(
-            mintAmount, 
-            {
-                value: utils.parseEther(mintAmountTotal.toString())
-            }
-        );
-        await mintTx.wait();
+        // const mintAmount = 20;
+        // const mintAmountTotal = 20 * 0.0001;
+        // const mintTx = await solari.mint(
+        //     mintAmount, 
+        //     {
+        //         value: utils.parseEther(mintAmountTotal.toString())
+        //     }
+        // );
+        // await mintTx.wait();
 
-        const liqAmount = 10;
+        // const liqAmount = 10;
 
-        const approvalTx = await solari.approve(exchange.address, utils.parseEther(liqAmount.toString()));
-        await approvalTx.wait();
+        // const approvalTx = await solari.approve(exchange.address, utils.parseEther(liqAmount.toString()));
+        // await approvalTx.wait();
         
-        const liqTx = await exchange.addLiquidity(utils.parseEther(liqAmount.toString()), futureDeadline,{
-            value: utils.parseEther(liqAmount.toString()),
-        });
-        await liqTx.wait();
+        // const liqTx = await exchange.addLiquidity(utils.parseEther(liqAmount.toString()), futureDeadline,{
+        //     value: utils.parseEther(liqAmount.toString()),
+        // });
+        // await liqTx.wait();
     
 
 
@@ -189,21 +189,27 @@ describe("Exchange", function () {
 
 
 
-        await expect(exchange.tokenToEthSwap(liqAmount, futureDeadline)).to.changeEtherBalance(address1.address, utils.parseEther(liqAmount.toString()));
+        // await expect(exchange.tokenToEthSwap(liqAmount, futureDeadline)).to.changeEtherBalance(address1.address, utils.parseEther(liqAmount.toString()));
 
         // await expect()
     });
 
     it("tokenToEthSwap(): Should revert at the deadline require expression.", async () => {
+        const {exchange, passedDeadline, mintAmount} = await loadFixture(fixture);
+
+        await expect(exchange.tokenToEthSwap(utils.parseEther(mintAmount.toString()), passedDeadline)).to.revertedWith("Deadline has passed.")
 
     });
 
     it("tokenToEthSwap(): Should revert at the tokens require expression.", async () => {
+        const {exchange, futureDeadline, } = await loadFixture(fixture);
+        const tokenAmount = 0;
 
+        await expect(exchange.tokenToEthSwap(tokenAmount, futureDeadline)).to.be.revertedWith("Cannot swap zero tokens.");
     });
 
     it("tokenToEthSwap(): Should revert at the sendEtherViaCall require expression.", async () => {
-
+            // Remove this test?
     });
 
     it("tokenToEthSwapTransfer(): Should swap tokens and send to recipient address.", async () => {
@@ -211,15 +217,20 @@ describe("Exchange", function () {
     });
 
     it("tokenToEthSwapTransfer(): Should revert at the deadline require expression.", async () => {
+        const {exchange, passedDeadline, mintAmount, address2} = await loadFixture(fixture);
 
+        await expect(exchange.tokenToEthSwapTransfer(mintAmount, address2.address, passedDeadline)).to.be.revertedWith("Deadline has passed.");
     });
 
     it("tokenToEthSwapTransfer(): Should revert at the tokenAmount require expression.", async () => {
-        
+        const {exchange, address2, futureDeadline} = await loadFixture(fixture);
+        const tokenAmount = 0;
+
+        await expect(exchange.tokenToEthSwapTransfer(tokenAmount, address2.address, futureDeadline)).to.be.revertedWith("Cannot swap zero tokens.");
     });
 
     it("tokenToEthSwapTransfer(): Should revert at the sendEtherViaCall require expression.", async () => {
-
+        // Remove test?
     });
 
     it("ethToTokenSwap(): Should swap ETH to ERC-20 tokens.", async () => {
@@ -227,7 +238,9 @@ describe("Exchange", function () {
     });
 
     it("ethToTokenSwap(): Should revert at the deadline require expression.", async () => {
+        const {exchange, passedDeadline} = await loadFixture(fixture);
 
+        await expect(exchange.ethToTokenSwap(passedDeadline)).to.be.revertedWith("Deadline has passed.");
     });
 
     it("ethToTokenSwapTransfer(): Should swap ETH to ERC-20 tokens to a recipient address.", async () => {
@@ -235,11 +248,16 @@ describe("Exchange", function () {
     });
 
     it("ethToTokenSwapTransfer(): Should revert at the deadline require expression.", async () => {
-        
+        const {exchange, passedDeadline, address2} = await loadFixture(fixture);
+
+        await expect(exchange.ethToTokenSwapTransfer(address2.address, passedDeadline)).to.be.revertedWith("Deadline has passed.");
     })
 
     it("currentReserves(): Should return the reserves of ETH and ERC-20.", async () => {
+        const {exchange} = await loadFixture(fixture);
 
+        const tx = await exchange.currentReserves();
+        expect(tx.toString()).to.equal("0,0");
     });
 
 });

@@ -86,8 +86,8 @@ contract Exchange is ERC20 {
         return true;
     }
 
-    function ethToTokenSwap(uint256 deadline) public payable returns (uint256) {
-        require(deadline > block.timestamp, "Deadline has passed");
+    function ethToTokenSwap(uint256 deadline) public payable returns (uint256) { // Token Amount requirement?
+        require(deadline > block.timestamp, "Deadline has passed.");
         uint256 ethAmount = msg.value;
         address recipient = msg.sender;
 
@@ -102,7 +102,7 @@ contract Exchange is ERC20 {
     }
 
     function ethToTokenSwapTransfer(address recipient, uint256 deadline) public payable returns (bool success) {
-        require(deadline > block.timestamp, "Deadline has passed");
+        require(deadline > block.timestamp, "Deadline has passed.");
 
         uint256 ethReserves = address(this).balance - msg.value;
         uint256 tokenReserve = getReserves();
